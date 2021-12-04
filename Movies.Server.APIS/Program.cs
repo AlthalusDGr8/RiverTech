@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using Movies.Entities.Implementations;
+using Movies.GrainClients;
 using Orleans;
 using Orleans.Hosting;
 
@@ -23,7 +23,7 @@ namespace Movies.Server.APIS
 				siloBuilder.UseLocalhostClustering();
 				siloBuilder.AddMemoryGrainStorageAsDefault();
 				siloBuilder.ConfigureApplicationParts(parts => parts
-							.AddApplicationPart(typeof(MovieManagerGrain).Assembly)
+							.AddApplicationPart(typeof(MovieGrainClient).Assembly)
 							.WithReferences());
 				
 			})						

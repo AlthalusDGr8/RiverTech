@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Movies.Entities.DataModels;
+using Movies.Entities.Movie.Definition;
 using Movies.Server.APIS.Models.Request;
 using Movies.Server.APIS.Models.Response;
-using Orleans;
 using System;
 using System.Threading.Tasks;
 
@@ -15,12 +15,12 @@ namespace Movies.Server.APIS.Controller
 	[ApiController]
 	public class MovieController : ControllerBase
 	{
-		private readonly IClusterClient _clusterClient;
+		private readonly IMovieGrainClient _clusterClient;
 
 		/// <summary>
 		/// Consstructor
 		/// </summary>		
-		public MovieController(IClusterClient clusterClient)
+		public MovieController(IMovieGrainClient clusterClient)
 		{
 			_clusterClient = clusterClient;
 		}
@@ -29,20 +29,24 @@ namespace Movies.Server.APIS.Controller
 		[Route("{id}")]
 		public async Task<MovieResponseModel> GetById(Guid id)
 		{
-			var result = _clusterClient.GetGrain<_MovieDataModel>(id);
+			var result = await _clusterClient.Get(id);			
 			return new MovieResponseModel() { Id = result.Id, Description = result.Description, Name = result.Name, ReleaseDate = result.ReleaseDate, Synopisis = result.Synopisis };
 		}
 
 		[HttpPost]		
 		public async Task<Guid> CreateNew([FromBody] NewMovieRequestModel newMovieRequestModel)
 		{
-			var result = _clusterClient.GetGrain<_MovieDataModel>(Guid.Empty);
+			var newId = Guid.NewGuid();
+
+			await _clusterClient.Set(newId, new NewMovieDTO()
+			{
+				Name = newMovieRequestModel.Name,
+				Description = newMovieRequestModel.Description,
+				ReleaseDate = newMovieRequestModel.ReleaseDate,
+				Synopsis = newMovieRequestModel.Synopsis
+			});
 			
-			return await result.CreateNew(new NewMovieDTO() { 
-				Name = newMovieRequestModel.Name, 
-				Description = newMovieRequestModel.Description, 
-				ReleaseDate = newMovieRequestModel.ReleaseDate, 
-				Synopsis = newMovieRequestModel.Synopsis});			
+			return newId;
 		}	
 	}
 }

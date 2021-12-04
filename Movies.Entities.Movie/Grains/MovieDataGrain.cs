@@ -1,31 +1,34 @@
-﻿using Movies.Entities.Core.Defintions;
-using Movies.Entities.DataModels;
+﻿using Movies.Entities.DataModels;
 using Movies.Entities.Movie.DataModels.Movies;
+using Movies.Entities.Movie.Definition;
 using Orleans;
+using Orleans.Providers;
 using System;
 using System.Threading.Tasks;
 
 namespace Movies.Entities.Movie.Grains
 {
-	/// <summary>
-	/// Movie Data Grain
-	/// </summary>
-	public class MovieDataGrain : Grain<MovieData>, IBaseGrain<MovieData, NewMovieDTO>
+	[StorageProvider(ProviderName = "Default")]
+	public class MovieDataGrain : Grain<MovieDataModel>, IMovieGrain
 	{
-		public Task<MovieData> Get() => Task.FromResult(State);
-		
-		public async Task<Guid> Set(NewMovieDTO baseNewModelDTO)
+		public Task<MovieDataModel> Get()
+			=> Task.FromResult(State);
+
+		public Task Set(Guid id, NewMovieDTO newMovieDTO)
 		{
-			State = new MovieData { Id = Guid.NewGuid(),
-				Name = baseNewModelDTO.Name, 
-				CreatedDate = DateTime.UtcNow, 
-				Description = baseNewModelDTO.Description, 
-				ReleaseDate = baseNewModelDTO.ReleaseDate, 
-				Synopisis = baseNewModelDTO.Synopsis };
+			State = new MovieDataModel
+			{
+				Id = id,
+				Name = newMovieDTO.Name,
+				CreatedDate = DateTime.UtcNow,
+				Description = newMovieDTO.Description,
+				ReleaseDate = newMovieDTO.ReleaseDate,
+				Synopisis = newMovieDTO.Synopsis
+			};
 
-			await WriteStateAsync();
+			WriteStateAsync();
 
-			return State.Id;
+			return Task.CompletedTask;
 		}
 	}
 }

@@ -2,7 +2,7 @@
 
 namespace Movies.Entities.Movie.DataModels.Movies
 {
-	public class MovieData
+	public class MovieDataModel
 	{
 		public Guid Id { get; set; }
 		public string Name { get; set; }
