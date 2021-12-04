@@ -1,4 +1,5 @@
 ﻿using Movies.Entities.DataModels;
+using Movies.Entities.Exceptions;
 using Movies.Entities.Movie.DataModels.Movies;
 using Movies.Entities.Movie.Definition;
 using Orleans;
@@ -11,23 +12,35 @@ namespace Movies.GrainClients
 	{
 		private readonly IGrainFactory _grainFactory;
 
-		public MovieGrainClient(
-			IGrainFactory grainFactory
-		)
+		public MovieGrainClient(IGrainFactory grainFactory)
 		{
 			_grainFactory = grainFactory;
 		}
 		
-		public Task<MovieDataModel> Get(Guid id)
+		public async Task<MovieDataModel> Get(Guid id)
 		{
 			var grain = _grainFactory.GetGrain<IMovieGrain>(id);
-			return grain.Get();
+
+			var result = await grain.Get();
+
+			if (result.CreatedDate == null)
+				throw new MovieIdNotExistsException(id, "The Movie you are looking for does not exist");
+
+			return result;
 		}
 
-		public async Task Set(Guid id, NewMovieDTO dto)
+		public async Task Set(Guid id, NewMovieDetailsDTO dto)
 		{
-			var grain = _grainFactory.GetGrain<IMovieGrain>(id);
+			var grain = _grainFactory.GetGrain<IMovieGrain>(id);			
 			await grain.Set(id, dto);			
+		}
+
+		public async Task UpdateMovie(Guid id, NewMovieDetailsDTO dto)
+		{
+			var existingMovie = await Get(id);
+			
+
+			await Set(id, dto);
 		}
 	}
 }

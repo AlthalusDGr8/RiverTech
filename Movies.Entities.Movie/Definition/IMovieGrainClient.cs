@@ -22,6 +22,15 @@ namespace Movies.Entities.Movie.Definition
 		/// </summary>		
 		/// <param name="dto">The data transfer object</param>
 		/// <returns></returns>
-		Task Set(Guid id, NewMovieDTO dto);
+		Task Set(Guid id, NewMovieDetailsDTO dto);
+
+		/// <summary>
+		/// Updates an exisitng Movie
+		/// </summary>
+		/// <param name="id">The id if present</param>
+		/// <param name="dto">The new details</param>
+		/// <returns></returns>
+		/// <exception cref="MovieIdNotExistsException">Thrown when the movie you want to update does not exist</exception>
+		Task UpdateMovie(Guid id, NewMovieDetailsDTO dto);
 	}
 }

@@ -50,11 +50,26 @@ namespace Movies.Entities.Exceptions
 	/// </summary>
 	public class MovieIdAlreadyExistsException : MovieException
 	{
-		public MovieIdAlreadyExistsException(long movieId, string message, Exception innerException = null) : base(message, innerException)
+		public MovieIdAlreadyExistsException(Guid movieId, string message, Exception innerException = null) : base(message, innerException)
 		{
 			ExtraDetails.Add("MovieId", movieId.ToString());
 		}
 
 		public override string UniqueErrorCode => "MOVIE_ALREADY_EXISTS";
 	}
+
+	/// <summary>
+	/// Throw this exception when movie already exists
+	/// </summary>
+	public class MovieIdNotExistsException : MovieException
+	{
+		public MovieIdNotExistsException(Guid movieId, string message, Exception innerException = null) : base(message, innerException)
+		{
+			ExtraDetails.Add("MovieId", movieId.ToString());
+		}
+
+		public override string UniqueErrorCode => "MOVIE_NOT_EXISTS";
+	}
+
+
 }

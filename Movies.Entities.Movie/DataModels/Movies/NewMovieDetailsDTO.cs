@@ -6,7 +6,7 @@ namespace Movies.Entities.DataModels
 	/// <summary>
 	/// Use this class to create a new movie
 	/// </summary>
-	public class NewMovieDTO : IBaseNewModelDTO
+	public class NewMovieDetailsDTO : IBaseNewModelDTO
 	{		
 
 		/// <summary>

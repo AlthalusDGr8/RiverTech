@@ -14,7 +14,7 @@ namespace Movies.Entities.Movie.Grains
 		public Task<MovieDataModel> Get()
 			=> Task.FromResult(State);
 
-		public Task Set(Guid id, NewMovieDTO newMovieDTO)
+		public Task Set(Guid id, NewMovieDetailsDTO newMovieDTO)
 		{
 			State = new MovieDataModel
 			{

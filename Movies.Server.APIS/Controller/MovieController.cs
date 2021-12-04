@@ -38,7 +38,7 @@ namespace Movies.Server.APIS.Controller
 		{
 			var newId = Guid.NewGuid();
 
-			await _clusterClient.Set(newId, new NewMovieDTO()
+			await _clusterClient.Set(newId, new NewMovieDetailsDTO()
 			{
 				Name = newMovieRequestModel.Name,
 				Description = newMovieRequestModel.Description,
@@ -47,6 +47,19 @@ namespace Movies.Server.APIS.Controller
 			});
 			
 			return newId;
-		}	
+		}
+
+		[HttpPatch]
+		[Route("{id}")]
+		public async Task UpdateExisting(Guid id, [FromBody] NewMovieRequestModel newMovieRequestModel)
+		{			
+			await _clusterClient.UpdateMovie(id, new NewMovieDetailsDTO()
+			{
+				Name = newMovieRequestModel.Name,
+				Description = newMovieRequestModel.Description,
+				ReleaseDate = newMovieRequestModel.ReleaseDate,
+				Synopsis = newMovieRequestModel.Synopsis
+			});			
+		}
 	}
 }
