@@ -1,3 +1,4 @@
+using GraphiQl;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Hosting;
@@ -55,14 +56,9 @@ namespace Movies.Server.APIS
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-
 			//I have built this custom error handler that will enable us to present outwards a standard format for error
 			// It will also help return specifc error codes based on what we want to signal back
 			// Here we would also use this to log any issues at this point
-
-
-
-
 			app.UseExceptionHandler(errorHander =>
 			{
 				errorHander.Run(
@@ -92,6 +88,9 @@ namespace Movies.Server.APIS
 					}
 					);
 			});
+
+			// Adding this makes graphiql UI available at /graphql 
+			app.UseGraphiQl("/graphql", "/graphsearch");
 
 			app.UseRouting();
 
