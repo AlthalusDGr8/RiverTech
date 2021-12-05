@@ -29,8 +29,17 @@ namespace Movies.Server.APIS.Controller
 		[Route("{id}")]
 		public async Task<MovieResponseModel> GetById(Guid id)
 		{
-			var result = await _clusterClient.Get(id);			
-			return new MovieResponseModel() { Id = result.Id, Description = result.Description, Name = result.Name, ReleaseDate = result.ReleaseDate, Synopisis = result.Synopisis };
+			var result = await _clusterClient.Get(id);
+
+			var runTime = new TimeSpan(0, result.RunTimeInMinutes, 0);
+			return new MovieResponseModel() { Id = result.Id, 
+				Description = result.Description, 
+				Name = result.Name, 
+				Rating = result.Rating,
+				ImgUrl = result.ImgUrl,	
+				RunTime = $"{runTime.Hours} hrs and {runTime.Minutes} minutes",
+				Genres = result.Genres				
+			};
 		}
 
 		[HttpPost]		
@@ -42,8 +51,10 @@ namespace Movies.Server.APIS.Controller
 			{
 				Name = newMovieRequestModel.Name,
 				Description = newMovieRequestModel.Description,
-				ReleaseDate = newMovieRequestModel.ReleaseDate,
-				Synopsis = newMovieRequestModel.Synopsis
+				Genres = newMovieRequestModel.Genres,
+				ImgUrl = newMovieRequestModel.ImgUrl,
+				Rating = newMovieRequestModel.Rating,
+				RunTimeInMinutes = newMovieRequestModel.RunTimeInMinutes
 			});
 			
 			return newId;
@@ -57,8 +68,10 @@ namespace Movies.Server.APIS.Controller
 			{
 				Name = newMovieRequestModel.Name,
 				Description = newMovieRequestModel.Description,
-				ReleaseDate = newMovieRequestModel.ReleaseDate,
-				Synopsis = newMovieRequestModel.Synopsis
+				Genres = newMovieRequestModel.Genres,
+				RunTimeInMinutes = newMovieRequestModel.RunTimeInMinutes,
+				ImgUrl=newMovieRequestModel.ImgUrl,
+				Rating =newMovieRequestModel.Rating,
 			});			
 		}
 	}

@@ -3,6 +3,7 @@ using Movies.Entities.Movie.DataModels.Movies;
 using Movies.Entities.Movie.Definition;
 using Orleans;
 using Orleans.Providers;
+using Orleans.Runtime;
 using System;
 using System.Threading.Tasks;
 
@@ -11,8 +12,14 @@ namespace Movies.Entities.Movie.Grains
 	[StorageProvider(ProviderName = "Default")]
 	public class MovieDataGrain : Grain<MovieDataModel>, IMovieGrain
 	{
-		public Task<MovieDataModel> Get()
-			=> Task.FromResult(State);
+		private readonly IPersistentState<MovieDataModel> _persistentState;
+		
+		public MovieDataGrain([PersistentState("def", "Default")] IPersistentState<MovieDataModel> persistentState)
+		{
+			_persistentState = persistentState;
+		}
+
+		public Task<MovieDataModel> Get() => Task.FromResult(State);
 
 		public Task Set(Guid id, NewMovieDetailsDTO newMovieDTO)
 		{
@@ -22,8 +29,10 @@ namespace Movies.Entities.Movie.Grains
 				Name = newMovieDTO.Name,
 				CreatedDate = DateTime.UtcNow,
 				Description = newMovieDTO.Description,
-				ReleaseDate = newMovieDTO.ReleaseDate,
-				Synopisis = newMovieDTO.Synopsis
+				Genres = newMovieDTO.Genres,
+				ImgUrl = newMovieDTO.ImgUrl,
+				Rating = newMovieDTO.Rating,
+				RunTimeInMinutes = newMovieDTO.RunTimeInMinutes				
 			};
 
 			WriteStateAsync();

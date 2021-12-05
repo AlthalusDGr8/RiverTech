@@ -8,24 +8,30 @@ namespace Movies.Server.APIS.Models.Response
 		/// The unique Id
 		/// </summary>
 		public Guid Id { get; set; }
+		
 		/// <summary>
-		/// THe name of the movie
+		/// Movie Name
 		/// </summary>
 		public string Name { get; set; }
-
 		/// <summary>
-		/// A short info about the film
-		/// </summary>
-		public string Synopisis { get; set; }
-
-		/// <summary>
-		/// The description
+		/// Movie Description
 		/// </summary>
 		public string Description { get; set; }
 		/// <summary>
-		/// The release date
+		/// Genres that this movie is assoicated with
 		/// </summary>
-		public DateTime ReleaseDate { get; set; }
-
+		public string[] Genres { get; set; }
+		/// <summary>
+		/// Rating
+		/// </summary>
+		public decimal Rating { get; set; }
+		/// <summary>
+		/// Total Run Time
+		/// </summary>
+		public string RunTime { get; set; }
+		/// <summary>
+		/// Image URl
+		/// </summary>
+		public string ImgUrl { get; set; }
 	}
 }

@@ -3,25 +3,30 @@
 namespace Movies.Server.APIS.Models.Request
 {
 	public class NewMovieRequestModel
-	{		
+	{
 		/// <summary>
-		/// The name of the new move
+		/// Movie Name
 		/// </summary>
 		public string Name { get; set; }
-
 		/// <summary>
-		/// A short description of the film
-		/// </summary>
-		public string Synopsis { get; set; }
-
-		/// <summary>
-		/// The associated description
+		/// Movie Description
 		/// </summary>
 		public string Description { get; set; }
-
 		/// <summary>
-		/// The date when it was released
+		/// Genres that this movie is assoicated with
 		/// </summary>
-		public DateTime ReleaseDate { get; set; }
+		public string[] Genres { get; set; }
+		/// <summary>
+		/// Rating
+		/// </summary>
+		public decimal Rating { get; set; }
+		/// <summary>
+		/// Total Run Time
+		/// </summary>
+		public int RunTimeInMinutes { get; set; }
+		/// <summary>
+		/// Image URl
+		/// </summary>
+		public string ImgUrl { get; set; }
 	}
 }

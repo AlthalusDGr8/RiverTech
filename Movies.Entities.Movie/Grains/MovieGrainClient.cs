@@ -31,6 +31,19 @@ namespace Movies.GrainClients
 
 		public async Task Set(Guid id, NewMovieDetailsDTO dto)
 		{
+			// If movie run time is less then 1 minute then throw exception
+			if (dto.RunTimeInMinutes < 1)
+				throw new InvalidFieldLengthException(nameof(dto.RunTimeInMinutes), dto.RunTimeInMinutes.ToString(), 1, 999, "Run time cannot be less then 1 minute");
+
+			if(dto.Rating < 1)
+				throw new InvalidFieldLengthException(nameof(dto.Rating), dto.Rating.ToString(), 1, 10, "Rating cannot be less then 1");
+
+			if (dto.Rating > 10)
+				throw new InvalidFieldLengthException(nameof(dto.Rating), dto.Rating.ToString(), 1, 10, "Rating cannot be more then 10");
+
+			if(string.IsNullOrEmpty(dto.Name.Trim()))
+				throw new InvalidFieldValueException(nameof(dto.Name), dto.Name, "Name cannot be empty");
+
 			var grain = _grainFactory.GetGrain<IMovieGrain>(id);			
 			await grain.Set(id, dto);			
 		}
