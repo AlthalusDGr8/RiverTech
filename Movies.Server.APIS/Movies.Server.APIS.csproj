@@ -10,6 +10,9 @@
     <PackageReference Include="GraphQL" Version="4.6.1" />
     <PackageReference Include="GraphQL.Server.Transports.AspNetCore.NewtonsoftJson" Version="5.0.2" />
     <PackageReference Include="GraphQL.Server.Ui.Playground" Version="5.0.2" />
+    <PackageReference Include="Microsoft.Extensions.Configuration" Version="6.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.FileExtensions" Version="6.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="6.0.0" />
     <PackageReference Include="Microsoft.Orleans.CodeGenerator.MSBuild" Version="3.5.1">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -26,5 +29,18 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Movies.Entities.Movie\Movies.Entities.Movie.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Setup\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Setup\01 - OrleansQuery.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Setup\02 - OrleansStorage.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 </Project>
