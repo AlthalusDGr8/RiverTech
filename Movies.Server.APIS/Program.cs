@@ -11,10 +11,7 @@ namespace Movies.Server.APIS
 {
 	public class Program
 	{
-		public static void Main(string[] args)
-		{
-			CreateHostBuilder(args).Build().Run();
-		}
+		public static void Main(string[] args) => CreateHostBuilder(args).Build().Run();
 
 		public static IHostBuilder CreateHostBuilder(string[] args)
 		{
@@ -38,7 +35,7 @@ namespace Movies.Server.APIS
 					config =>
 					{
 						config.Invariant = "System.Data.SqlClient";
-						config.ConnectionString = "Server=(LocalDB)\\MSSQLLocalDB;Integrated Security=true;Initial Catalog=Test_Orleans";
+						config.ConnectionString = "Server=(LocalDB)\\MSSQLLocalDB;Integrated Security=true;Initial Catalog=Test_Orleans"; //TODO: Get from Config
 						config.UseJsonFormat = true;
 					});
 				siloBuilder.AddMemoryGrainStorageAsDefault();

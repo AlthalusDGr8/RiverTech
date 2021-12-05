@@ -28,6 +28,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Movies.Cache.MemoryCache\Movies.Cache.MemoryCache.csproj" />
     <ProjectReference Include="..\Movies.Entities.Movie\Movies.Entities.Movie.csproj" />
   </ItemGroup>
 

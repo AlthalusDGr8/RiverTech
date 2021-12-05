@@ -19,7 +19,7 @@ namespace Movies.Entities.Movie.Definition
 		/// </summary>
 		/// <param name="newMovieDTO">Data transfer object</param>
 		/// <returns></returns>
-		Task Set(Guid id, NewMovieDetailsDTO newMovieDTO);
+		Task Set(Guid id, NewMovieDetailsDTO newMovieDTO, bool isUpdate = false);
 		
 	}
 }

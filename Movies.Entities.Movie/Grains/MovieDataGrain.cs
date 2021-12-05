@@ -21,19 +21,25 @@ namespace Movies.Entities.Movie.Grains
 
 		public Task<MovieDataModel> Get() => Task.FromResult(State);
 
-		public Task Set(Guid id, NewMovieDetailsDTO newMovieDTO)
+		public Task Set(Guid id, NewMovieDetailsDTO newMovieDTO, bool isUpdate = false)
 		{
 			State = new MovieDataModel
 			{
 				Id = id,
 				Name = newMovieDTO.Name,
-				CreatedDate = DateTime.UtcNow,
 				Description = newMovieDTO.Description,
 				Genres = newMovieDTO.Genres,
 				ImgUrl = newMovieDTO.ImgUrl,
 				Rating = newMovieDTO.Rating,
-				RunTimeInMinutes = newMovieDTO.RunTimeInMinutes				
+				RunTimeInMinutes = newMovieDTO.RunTimeInMinutes,
+				UpdatedOnDate = DateTime.UtcNow
 			};
+
+			// If this is a new record then mark the create date timestamp
+			if(!isUpdate)
+			{
+				State.CreatedDate = DateTime.UtcNow;
+			}
 
 			WriteStateAsync();
 

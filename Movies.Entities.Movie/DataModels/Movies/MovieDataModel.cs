@@ -35,5 +35,7 @@ namespace Movies.Entities.Movie.DataModels.Movies
 		public string ImgUrl { get; set; }
 
 		public DateTime? CreatedDate { get; set; }
+
+		public DateTime? UpdatedOnDate { get; set; }
 	}
 }

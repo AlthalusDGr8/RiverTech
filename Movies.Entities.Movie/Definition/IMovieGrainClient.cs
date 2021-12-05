@@ -21,8 +21,9 @@ namespace Movies.Entities.Movie.Definition
 		/// Creates a new Movie
 		/// </summary>		
 		/// <param name="dto">The data transfer object</param>
+		/// <param name="isUpdate">determiens if we are doing an update or create</param>
 		/// <returns></returns>
-		Task Set(Guid id, NewMovieDetailsDTO dto);
+		Task Set(Guid id, NewMovieDetailsDTO dto, bool isUpdate = false);
 
 		/// <summary>
 		/// Updates an exisitng Movie

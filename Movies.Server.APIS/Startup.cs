@@ -6,8 +6,13 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
+using Movies.Cache.MemoryCache;
+using Movies.CentralCore.Caching;
 using Movies.CentralCore.Exceptions;
+using Movies.CentralCore.Repository;
+using Movies.Entities.Movie.DataModels.Genres;
 using Movies.Entities.Movie.Definition;
+using Movies.Entities.Movie.Genres;
 using Movies.GrainClients;
 using Movies.Server.APIS.Models.Response;
 using System;
@@ -25,9 +30,17 @@ namespace Movies.Server.APIS
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
+			// Register grain
 			services.AddSingleton<IMovieGrainClient, MovieGrainClient>();
+			
+			// Set cache client as singleton
+			services.AddSingleton<ICacheManager, MemoryCacheManager>();
 
-			//Added swagger elements for eaiser 
+			// Genre Repository
+			services.AddSingleton<ILookupRepository<GenreDTO>, GenreRepository>();
+
+
+			//Added swagger elements for eaiser debugging and demo
 			services.AddMvcCore().AddApiExplorer();
 
 			services.AddSwaggerGen(c =>
@@ -40,14 +53,16 @@ namespace Movies.Server.APIS
 		}
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IHostApplicationLifetime lifetime)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-
-			IConfiguration config = new ConfigurationBuilder().AddJsonFile("appsettings.json", true, true).Build();
 
 			//I have built this custom error handler that will enable us to present outwards a standard format for error
 			// It will also help return specifc error codes based on what we want to signal back
 			// Here we would also use this to log any issues at this point
+
+
+
+
 			app.UseExceptionHandler(errorHander =>
 			{
 				errorHander.Run(
@@ -78,13 +93,7 @@ namespace Movies.Server.APIS
 					);
 			});
 
-
-			if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-            }
-
-            app.UseRouting();
+			app.UseRouting();
 
             app.UseEndpoints(endpoints =>
             {
@@ -97,7 +106,9 @@ namespace Movies.Server.APIS
 			{
 				c.SwaggerEndpoint("v1/swagger.json", "Tech Demo");
 			});
-			
+
+			IConfiguration config = new ConfigurationBuilder().AddJsonFile("appsettings.json", true, true).Build();
+
 			PrepareDatabase(config);			
 		}
 		
