@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GraphQL.Types;
+using System;
 
 namespace Movies.Entities.Movie.DataModels.Movies
 {
@@ -37,5 +38,20 @@ namespace Movies.Entities.Movie.DataModels.Movies
 		public DateTime? CreatedDate { get; set; }
 
 		public DateTime? UpdatedOnDate { get; set; }
+	}
+
+
+	public class MovieDataModelGraphType : ObjectGraphType<MovieDataModel>
+	{
+		public MovieDataModelGraphType()
+		{
+			Field(x => x.Id).Description("The Unique Id of the Movie.");
+			Field(x => x.Name).Description("The name of the movie.");
+			Field(x => x.Description).Description("short descrption of the movie.");
+			Field(x => x.Rating).Description("Movie rating from 1 to 10");
+			Field(x => x.RunTimeInMinutes).Description("Movie runtime duration");
+			Field(x => x.ImgUrl).Description("The Url where to find the poster");
+			Field(x => x.Genres).Description("All possible genres that this movie belongs to");			
+		}
 	}
 }

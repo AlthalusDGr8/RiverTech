@@ -27,9 +27,14 @@ namespace Movies.Server.APIS
 {
 	public class Startup
     {
-        // This method gets called by the runtime. Use this method to add services to the container.
-        // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
-        public void ConfigureServices(IServiceCollection services)
+		public const string GraphQlPath = "/graphql";
+		public const string CustomGraphQlPath = "/custom-path";
+
+		public virtual void ConfigureGraphQl(IServiceCollection services) { }
+
+		// This method gets called by the runtime. Use this method to add services to the container.
+		// For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
+		public void ConfigureServices(IServiceCollection services)
         {
 			// Register grain
 			services.AddSingleton<IMovieGrainClient, MovieGrainClient>();
@@ -39,8 +44,16 @@ namespace Movies.Server.APIS
 
 			// Genre Repository
 			services.AddSingleton<ILookupRepository<GenreDTO>, GenreRepository>();
+			
+			ConfigureGraphQl(services);
 
+			//services.AddSingleton<ISchema, MovieSchema>();
+			//services.AddSingleton<MovieGraphQuery>();
+			//services.AddSingleton<MovieGraphMutation>();
 
+			//services.AddSingleton<MovieDataModelGraphType>();
+			
+			
 			//Added swagger elements for eaiser debugging and demo
 			services.AddMvcCore().AddApiExplorer();
 
@@ -88,9 +101,9 @@ namespace Movies.Server.APIS
 					}
 					);
 			});
-
+			
 			// Adding this makes graphiql UI available at /graphql 
-			app.UseGraphiQl("/graphql", "/graphsearch");
+			app.UseGraphiQl();
 
 			app.UseRouting();
 
