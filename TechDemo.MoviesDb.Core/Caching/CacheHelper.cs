@@ -1,4 +1,4 @@
-﻿namespace Movies.CentralCore.Caching
+﻿namespace TechDemo.MoviesDb.Core.Caching
 {
 	public static class CacheHelper
 	{
@@ -13,18 +13,14 @@
 		/// <param name="lockObject">The lock object to use for ensureng single fetch</param>
 		public static TResult BuildCacheAndFetchItems<TResult>(ICacheManager cacheManager, Func<TResult> fetchAndCacheFunction, string cacheKey, object lockObject) where TResult : new()
 		{
-			TResult cacheItems = cacheManager.GetFromCache<TResult>(cacheKey);
+			var cacheItems = cacheManager.GetFromCache<TResult>(cacheKey);
 			if (EqualityComparer<TResult>.Default.Equals(cacheItems, default))
-			{
 				lock (lockObject)
 				{
 					cacheItems = cacheManager.GetFromCache<TResult>(cacheKey);
 					if (EqualityComparer<TResult>.Default.Equals(cacheItems, default))
-					{
 						cacheItems = fetchAndCacheFunction.Invoke();
-					}
 				}
-			}
 
 			return cacheItems;
 		}

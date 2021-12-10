@@ -1,4 +1,4 @@
-﻿namespace Movies.CentralCore.Caching
+﻿namespace TechDemo.MoviesDb.Core.Caching
 {
 	/// <summary>
 	/// Generic definition of cache manager

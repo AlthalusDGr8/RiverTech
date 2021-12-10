@@ -1,20 +1,20 @@
-﻿using Movies.CentralCore.Caching;
-using System.Runtime.Caching;
-namespace Movies.Cache.MemoryCache
+﻿using System.Runtime.Caching;
+using TechDemo.MoviesDb.Core.Caching;
+namespace TechDemo.MoviesDb.Caching.Memory
 {
 	public class MemoryCacheManager : ICacheManager
 	{
 		/// <summary>
 		/// Mem Cache store
 		/// </summary>
-		private System.Runtime.Caching.MemoryCache Cache { get; set; }
+		private MemoryCache Cache { get; set; }
 
 		/// <summary>
 		/// Constructor
 		/// </summary>
 		public MemoryCacheManager()
 		{
-			Cache = System.Runtime.Caching.MemoryCache.Default;
+			Cache = MemoryCache.Default;
 		}
 
 		/// <summary>
@@ -36,7 +36,7 @@ namespace Movies.Cache.MemoryCache
 		{
 			// If no duration specified then set to 24 hrs
 			if (duration == null)
-				duration = new TimeSpan(1, 0, 0,0);
+				duration = new TimeSpan(1, 0, 0, 0);
 			Cache.Set(cacheKey, cacheItem, new CacheItemPolicy() { AbsoluteExpiration = new DateTimeOffset(DateTime.Now.Add(duration.Value)) });
 		}
 

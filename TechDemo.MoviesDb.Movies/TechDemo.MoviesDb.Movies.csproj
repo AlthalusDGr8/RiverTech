@@ -7,11 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="System.Runtime.Caching" Version="6.0.0" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\Movies.CentralCore\Movies.CentralCore.csproj" />
+    <ProjectReference Include="..\TechDemo.MoviesDb.Core\TechDemo.MoviesDb.Core.csproj" />
   </ItemGroup>
 
 </Project>
