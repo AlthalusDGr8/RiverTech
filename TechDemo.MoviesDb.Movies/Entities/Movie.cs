@@ -48,7 +48,7 @@ namespace TechDemo.MoviesDb.Movies.Entities
 		/// <summary>
 		/// A list of genres for this movie
 		/// </summary>
-		public ICollection<Genre> Genres { get; set; }
+		public ICollection<MovieGenre> MovieGenres { get; set; }
 
 	}
 }

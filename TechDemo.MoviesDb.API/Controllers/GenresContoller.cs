@@ -7,6 +7,7 @@ using TechDemo.MoviesDb.API.Models.Response;
 using TechDemo.MoviesDb.Core.Caching;
 using TechDemo.MoviesDb.Core.DbEntities;
 using TechDemo.MoviesDb.Movies.Entities;
+using TechDemo.MoviesDb.Movies.Exceptions;
 
 namespace TechDemo.MoviesDb.API.Controllers
 {
@@ -26,7 +27,7 @@ namespace TechDemo.MoviesDb.API.Controllers
 		}
 
 
-		// <summary>
+		/// <summary>
 		/// Returns all the Genres in the system
 		/// </summary>
 		/// <returns></returns>
@@ -43,6 +44,21 @@ namespace TechDemo.MoviesDb.API.Controllers
 			}
 
 			return alreadyCached;
+		}
+
+		/// <summary>
+		/// Returns a Genre with a specifcied id
+		/// </summary>
+		/// <returns></returns>
+		[Route("id")]
+		[HttpGet]
+		public async Task<GenreResponseModel> GetById([FromQuery]int id, CancellationToken cancellationToken)
+		{
+			var result = await _entityRepo.GetByKeyAsync(id, cancellationToken);
+			if(result != null)
+				return new GenreResponseModel() { Id = result.Id, DisplayName = result.Description, Code = result.Code };
+
+			throw new GenreNotExistsException(id, $"The Genre with id {id} does not exist");
 		}
 	}
 }

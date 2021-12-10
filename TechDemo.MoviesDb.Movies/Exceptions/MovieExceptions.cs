@@ -1,5 +1,4 @@
-﻿using Movies.CentralCore.Exceptions;
-using System;
+﻿using TechDemo.MoviesDb.Core.Exceptions;
 
 namespace Movies.Entities.Exceptions
 {

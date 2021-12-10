@@ -1,4 +1,5 @@
-﻿using TechDemo.MoviesDb.Core.DbEntities;
+﻿using System.ComponentModel.DataAnnotations;
+using TechDemo.MoviesDb.Core.DbEntities;
 
 namespace TechDemo.MoviesDb.Movies.Entities
 {
@@ -10,6 +11,7 @@ namespace TechDemo.MoviesDb.Movies.Entities
 		/// <summary>
 		/// The Genre Id
 		/// </summary>
+		[Key]
 		public int Id { get; set; }
 
 		/// <summary>
@@ -22,6 +24,6 @@ namespace TechDemo.MoviesDb.Movies.Entities
 		/// </summary>
 		public string Description { get; set; }
 
-		public ICollection<Movie> Movies { get; set; }
+		public ICollection<MovieGenre> MovieGenres { get; set; }
 	}
 }
