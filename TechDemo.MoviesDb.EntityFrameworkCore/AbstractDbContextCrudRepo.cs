@@ -4,7 +4,7 @@ using TechDemo.MoviesDb.Core.Extentions;
 
 namespace TechDemo.MoviesDb.EntityFrameworkCore
 {
-	public class AbstractEFDbContextEntityRepo<TEntity, TDbContext> : IEntityRepo<TEntity>
+	public abstract class AbstractEFDbContextEntityRepo<TEntity, TDbContext> : IEntityRepo<TEntity>
 		where TDbContext : DbContext
 		where TEntity : class, IEntity, new()
 	{
@@ -55,37 +55,7 @@ namespace TechDemo.MoviesDb.EntityFrameworkCore
 
 			return entry.Entity;
 		}
-
-		public async Task DeleteAsync(int id, CancellationToken cancellationToken)
-		{
-			var entity = new TEntity
-			{
-				Id = id
-			};
-
-			var entry = Context.Entry(entity);
-
-			if (entry.State == EntityState.Detached)
-			{
-				var set = GetDbSet();
-
-				var found = await set.FindAsync(id, cancellationToken);
-
-				if (found != null)
-				{
-					set.Remove(found);
-				}
-				else
-				{
-					set.Attach(entity);
-					entry.State = EntityState.Deleted;
-				}
-
-			}
-
-			await Context.SaveChangesAsync(cancellationToken);
-		}
-
+		
 		public async Task<IEnumerable<TEntity>> GetAllAsync(CancellationToken cancellationToken)
 		{
 			var list = await GetDbSet().ToListAsync(cancellationToken);
@@ -93,7 +63,7 @@ namespace TechDemo.MoviesDb.EntityFrameworkCore
 			return list;
 		}
 
-		public Task<TEntity> GetByKeyAsync(int id, CancellationToken cancellationToken)
+		public Task<TEntity> GetByKeyAsync(long id, CancellationToken cancellationToken)
 		{
 			return GetDbSet().FindAsync(new object[] { id }, cancellationToken).AsTask();
 		}

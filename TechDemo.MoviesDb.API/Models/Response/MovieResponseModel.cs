@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace TechDemo.MoviesDb.API.Models.Response
 {
@@ -7,7 +8,7 @@ namespace TechDemo.MoviesDb.API.Models.Response
 		/// <summary>
 		/// The unique Id
 		/// </summary>
-		public Guid Id { get; set; }
+		public long Id { get; set; }
 
 		/// <summary>
 		/// Movie Name
@@ -20,11 +21,11 @@ namespace TechDemo.MoviesDb.API.Models.Response
 		/// <summary>
 		/// Genres that this movie is assoicated with
 		/// </summary>
-		public string[] Genres { get; set; }
+		public IEnumerable<string> GenreCodes { get; set; }
 		/// <summary>
 		/// Rating
 		/// </summary>
-		public decimal Rating { get; set; }
+		public decimal CriticRating { get; set; }
 		/// <summary>
 		/// Total Run Time
 		/// </summary>
@@ -33,5 +34,7 @@ namespace TechDemo.MoviesDb.API.Models.Response
 		/// Image URl
 		/// </summary>
 		public string ImgUrl { get; set; }
+
+		internal static string ConvertMovieLengthToRuntime(TimeSpan movieLength) => $"{movieLength.TotalHours} Hours and {movieLength.TotalMinutes} Minutes";
 	}
 }

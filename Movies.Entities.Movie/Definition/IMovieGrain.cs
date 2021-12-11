@@ -1,5 +1,4 @@
-﻿using Movies.Entities.DataModels;
-using Movies.Entities.Movie.DataModels.Movies;
+﻿using Movies.Entities.Movie.DataModels.Movies;
 using Orleans;
 using System;
 using System.Threading.Tasks;

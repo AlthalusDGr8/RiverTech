@@ -2,10 +2,10 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using Orleans;
+using Orleans.Hosting;
+using System.Text.Json;
+using TechDemo.MoviesDb.Orleans.Grains;
 
 namespace TechDemo.MoviesDb.API
 {
@@ -20,17 +20,40 @@ namespace TechDemo.MoviesDb.API
 		{
 			var configuration = new ConfigurationBuilder().AddEnvironmentVariables().AddCommandLine(args).AddJsonFile("appsettings.json").Build();
 
+			JsonSerializerOptions options = new(JsonSerializerDefaults.Web)
+			{
+				WriteIndented = true,
+				NumberHandling = System.Text.Json.Serialization.JsonNumberHandling.AllowNamedFloatingPointLiterals
+			};
+
+
+
 			return Host.CreateDefaultBuilder(args)
-					.ConfigureAppConfiguration(builder =>
+				
+				// Configuration
+				.ConfigureAppConfiguration(builder =>
 					{
 						builder.Sources.Clear();
 						builder.AddConfiguration(configuration);
 					})
+					// Startup
 					.ConfigureWebHostDefaults(webBuilder =>
 					{
 						webBuilder.UseStartup<Startup>();
-					})
-					.ConfigureLogging(logging => logging.AddConsole()); ;
+					})					
+					// Logging
+					.ConfigureLogging(logging => logging.AddConsole())
+
+					// Orleans COnfig
+					.UseOrleans((ctx, siloBuilder) =>
+					{
+						siloBuilder.UseLocalhostClustering();
+						siloBuilder.AddMemoryGrainStorageAsDefault();
+						siloBuilder.ConfigureApplicationParts(parts => parts
+									.AddApplicationPart(typeof(UserMovieRatingGrain).Assembly)
+									.WithReferences());
+
+					});
 		}
 	}
 }

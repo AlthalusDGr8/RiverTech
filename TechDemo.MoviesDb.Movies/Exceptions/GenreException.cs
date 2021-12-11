@@ -18,7 +18,7 @@ namespace TechDemo.MoviesDb.Movies.Exceptions
 	/// </summary>
 	public class GenreNotExistsException : GenreException
 	{
-		public GenreNotExistsException(int id, string message, Exception innerException = null) : base(message, innerException)
+		public GenreNotExistsException(long id, string message, Exception innerException = null) : base(message, innerException)
 		{
 			ExtraDetails.Add("Id", id.ToString());	
 		}

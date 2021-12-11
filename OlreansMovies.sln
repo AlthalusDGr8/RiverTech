@@ -21,15 +21,17 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Movies.Entities.Core", "Mov
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Movies.Entities.Movie", "Movies.Entities.Movie\Movies.Entities.Movie.csproj", "{2707FD59-DF63-4219-A2AA-F1032120B95F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TechDemo.MoviesDb.Core", "TechDemo.MoviesDb.Core\TechDemo.MoviesDb.Core.csproj", "{7FE59739-E41B-45F1-B2A4-E4CE089799B5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TechDemo.MoviesDb.Core", "TechDemo.MoviesDb.Core\TechDemo.MoviesDb.Core.csproj", "{7FE59739-E41B-45F1-B2A4-E4CE089799B5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TechDemo.MoviesDb.Movies", "TechDemo.MoviesDb.Movies\TechDemo.MoviesDb.Movies.csproj", "{FDF662CB-565E-4E69-AEE2-8A43DAD60945}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TechDemo.MoviesDb.Movies", "TechDemo.MoviesDb.Movies\TechDemo.MoviesDb.Movies.csproj", "{FDF662CB-565E-4E69-AEE2-8A43DAD60945}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TechDemo.MoviesDb.EntityFrameworkCore", "TechDemo.MoviesDb.EntityFrameworkCore\TechDemo.MoviesDb.EntityFrameworkCore.csproj", "{EC8ABBA2-DE57-47A5-A8B9-2887F38DE268}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TechDemo.MoviesDb.API", "TechDemo.MoviesDb.API\TechDemo.MoviesDb.API.csproj", "{15BD2C0D-28BF-4CC6-BACC-CA5D41F89399}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TechDemo.MoviesDb.API", "TechDemo.MoviesDb.API\TechDemo.MoviesDb.API.csproj", "{15BD2C0D-28BF-4CC6-BACC-CA5D41F89399}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TechDemo.MoviesDb.Caching.Memory", "TechDemo.MoviesDb.Caching.Memory\TechDemo.MoviesDb.Caching.Memory.csproj", "{51C7301F-FC3C-453E-9A88-8DB11DCAA765}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TechDemo.MoviesDb.Caching.Memory", "TechDemo.MoviesDb.Caching.Memory\TechDemo.MoviesDb.Caching.Memory.csproj", "{51C7301F-FC3C-453E-9A88-8DB11DCAA765}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TechDemo.MoviesDb.Orleans", "TechDemo.MoviesDb.Orleans\TechDemo.MoviesDb.Orleans.csproj", "{CCE453C7-321E-4261-91FD-171DB83D597E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -73,6 +75,10 @@ Global
 		{51C7301F-FC3C-453E-9A88-8DB11DCAA765}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{51C7301F-FC3C-453E-9A88-8DB11DCAA765}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{51C7301F-FC3C-453E-9A88-8DB11DCAA765}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CCE453C7-321E-4261-91FD-171DB83D597E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CCE453C7-321E-4261-91FD-171DB83D597E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CCE453C7-321E-4261-91FD-171DB83D597E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CCE453C7-321E-4261-91FD-171DB83D597E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -87,6 +93,7 @@ Global
 		{EC8ABBA2-DE57-47A5-A8B9-2887F38DE268} = {614328F0-0997-4167-A212-FBD1DE564D10}
 		{15BD2C0D-28BF-4CC6-BACC-CA5D41F89399} = {614328F0-0997-4167-A212-FBD1DE564D10}
 		{51C7301F-FC3C-453E-9A88-8DB11DCAA765} = {614328F0-0997-4167-A212-FBD1DE564D10}
+		{CCE453C7-321E-4261-91FD-171DB83D597E} = {614328F0-0997-4167-A212-FBD1DE564D10}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C8D162F0-CA39-495D-9796-16A8004BB075}

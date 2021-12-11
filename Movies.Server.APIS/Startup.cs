@@ -14,7 +14,7 @@ using Movies.CentralCore.Repository;
 using Movies.Entities.Movie.DataModels.Genres;
 using Movies.Entities.Movie.Definition;
 using Movies.Entities.Movie.Genres;
-using Movies.GrainClients;
+using Movies.Entities.Movie.Grains;
 using Movies.Server.APIS.Models.Response;
 using System;
 using System.Data.SqlClient;

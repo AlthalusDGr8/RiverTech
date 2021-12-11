@@ -1,7 +1,7 @@
 ﻿using Movies.Entities.Core.Defintions;
 using System;
 
-namespace Movies.Entities.DataModels
+namespace Movies.Entities.Movie.DataModels.Movies
 {
 	/// <summary>
 	/// Use this class to create a new movie

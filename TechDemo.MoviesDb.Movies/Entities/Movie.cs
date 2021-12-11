@@ -4,12 +4,12 @@ using TechDemo.MoviesDb.Core.DbEntities;
 namespace TechDemo.MoviesDb.Movies.Entities
 {
 	public class Movie : IEntity
-	{
+	{		
 		/// <summary>
 		/// Unique Movie Id
 		/// </summary>
 		[Key]
-		public int Id { get; set; }
+		public long MovieId { get; set; }
 		
 		/// <summary>
 		/// The unique key to search with
@@ -32,7 +32,7 @@ namespace TechDemo.MoviesDb.Movies.Entities
 		/// Rating
 		/// </summary>
 		[Required]
-		public decimal Rating { get; set; }
+		public decimal CriticRating { get; set; }
 
 		/// <summary>
 		/// The length in minutes of the Movie
@@ -45,10 +45,13 @@ namespace TechDemo.MoviesDb.Movies.Entities
 		/// </summary>		
 		public string ImgUrl { get; set; }
 
+		/* EF Relations */
+
 		/// <summary>
 		/// A list of genres for this movie
 		/// </summary>
-		public ICollection<MovieGenre> MovieGenres { get; set; }
+		public ICollection<Genre> Genres { get; set; }
 
+		public long Id { get { return MovieId; } }
 	}
 }

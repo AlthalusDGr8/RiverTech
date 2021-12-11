@@ -12,7 +12,7 @@ namespace TechDemo.MoviesDb.Movies.Entities
 		/// The Genre Id
 		/// </summary>
 		[Key]
-		public int Id { get; set; }
+		public long GenreId { get; set; }
 
 		/// <summary>
 		/// A unique ideitifying code
@@ -24,6 +24,9 @@ namespace TechDemo.MoviesDb.Movies.Entities
 		/// </summary>
 		public string Description { get; set; }
 
-		public ICollection<MovieGenre> MovieGenres { get; set; }
+		/* EF Relations */
+		public ICollection<Movie> Movies{ get; set; }
+		
+		public long Id { get { return GenreId; } }
 	}
 }

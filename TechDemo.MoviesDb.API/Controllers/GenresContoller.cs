@@ -14,7 +14,7 @@ namespace TechDemo.MoviesDb.API.Controllers
 	/// <summary>
 	/// COntroller that helps set up stuff
 	/// </summary>
-	[Route("api/Genres")]
+	[Route("api/genres")]
 	[ApiController]
 	public class GenresContoller : ControllerBase
 	{		
@@ -50,9 +50,9 @@ namespace TechDemo.MoviesDb.API.Controllers
 		/// Returns a Genre with a specifcied id
 		/// </summary>
 		/// <returns></returns>
-		[Route("id")]
+		[Route("{id:long}")]
 		[HttpGet]
-		public async Task<GenreResponseModel> GetById([FromQuery]int id, CancellationToken cancellationToken)
+		public async Task<GenreResponseModel> GetById([FromRoute]int id, CancellationToken cancellationToken)
 		{
 			var result = await _entityRepo.GetByKeyAsync(id, cancellationToken);
 			if(result != null)

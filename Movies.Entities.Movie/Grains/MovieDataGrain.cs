@@ -1,5 +1,4 @@
-﻿using Movies.Entities.DataModels;
-using Movies.Entities.Movie.DataModels.Movies;
+﻿using Movies.Entities.Movie.DataModels.Movies;
 using Movies.Entities.Movie.Definition;
 using Orleans;
 using Orleans.Providers;

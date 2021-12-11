@@ -1,5 +1,4 @@
 ﻿using Movies.CentralCore.Repository;
-using Movies.Entities.DataModels;
 using Movies.Entities.Exceptions;
 using Movies.Entities.Movie.DataModels.Genres;
 using Movies.Entities.Movie.DataModels.Movies;
@@ -8,7 +7,7 @@ using Orleans;
 using System;
 using System.Threading.Tasks;
 
-namespace Movies.GrainClients
+namespace Movies.Entities.Movie.Grains
 {
 	public class MovieGrainClient : IMovieGrainClient
 	{
@@ -21,7 +20,7 @@ namespace Movies.GrainClients
 			_grainFactory = grainFactory;
 			_genreLookupRepository = genreLookupRepository;
 		}
-		
+
 		public async Task<MovieDataModel> Get(Guid id)
 		{
 			var grain = _grainFactory.GetGrain<IMovieGrain>(id);
@@ -41,27 +40,25 @@ namespace Movies.GrainClients
 			if (dto.RunTimeInMinutes < 1)
 				throw new InvalidFieldLengthException(nameof(dto.RunTimeInMinutes), dto.RunTimeInMinutes.ToString(), 1, 999, "Run time cannot be less then 1 minute");
 
-			if(dto.Rating < 1)
+			if (dto.Rating < 1)
 				throw new InvalidFieldLengthException(nameof(dto.Rating), dto.Rating.ToString(), 1, 10, "Rating cannot be less then 1");
 
 			if (dto.Rating > 10)
 				throw new InvalidFieldLengthException(nameof(dto.Rating), dto.Rating.ToString(), 1, 10, "Rating cannot be more then 10");
 
-			if(string.IsNullOrEmpty(dto.Name.Trim()))
+			if (string.IsNullOrEmpty(dto.Name.Trim()))
 				throw new InvalidFieldValueException(nameof(dto.Name), dto.Name, "Name cannot be empty");
 
 			// need to verify if the genres provided are part of our lookups
-			foreach (string item in dto.Genres)
+			foreach (var item in dto.Genres)
 			{
 				var checkGenreExists = _genreLookupRepository.GetByCode(item);
 				if (checkGenreExists == null)
-				{
 					throw new InvalidFieldValueException("Genre", item, "Genre does not exist");
-				}
 			}
 
-			var grain = _grainFactory.GetGrain<IMovieGrain>(id);			
-			await grain.Set(id, dto, isUpdate);			
+			var grain = _grainFactory.GetGrain<IMovieGrain>(id);
+			await grain.Set(id, dto, isUpdate);
 		}
 
 		public async Task UpdateMovie(Guid id, NewMovieDetailsDTO dto)

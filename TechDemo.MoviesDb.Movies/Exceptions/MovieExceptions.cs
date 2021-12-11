@@ -1,6 +1,6 @@
 ﻿using TechDemo.MoviesDb.Core.Exceptions;
 
-namespace Movies.Entities.Exceptions
+namespace TechDemo.MoviesDb.Movies.Exceptions
 {
 	/// <summary>
 	/// Anything related to the movies that needs to throw an exxeption should pass through here
@@ -33,7 +33,7 @@ namespace Movies.Entities.Exceptions
 	/// </summary>
 	public class InvalidFieldLengthException : MovieException
 	{
-		public InvalidFieldLengthException(string fieldName, string providedValue, int minLenght, int maxLenght,  string message, Exception innerException = null) : base(message, innerException)
+		public InvalidFieldLengthException(string fieldName, string providedValue, int minLenght, int maxLenght, string message, Exception innerException = null) : base(message, innerException)
 		{
 			ExtraDetails.Add("InvalidField", fieldName);
 			ExtraDetails.Add("ProvidedValue", providedValue);
@@ -49,7 +49,7 @@ namespace Movies.Entities.Exceptions
 	/// </summary>
 	public class MovieIdAlreadyExistsException : MovieException
 	{
-		public MovieIdAlreadyExistsException(Guid movieId, string message, Exception innerException = null) : base(message, innerException)
+		public MovieIdAlreadyExistsException(long movieId, string message, Exception innerException = null) : base(message, innerException)
 		{
 			ExtraDetails.Add("MovieId", movieId.ToString());
 		}
@@ -62,7 +62,7 @@ namespace Movies.Entities.Exceptions
 	/// </summary>
 	public class MovieIdNotExistsException : MovieException
 	{
-		public MovieIdNotExistsException(Guid movieId, string message, Exception innerException = null) : base(message, innerException)
+		public MovieIdNotExistsException(long movieId, string message, Exception innerException = null) : base(message, innerException)
 		{
 			ExtraDetails.Add("MovieId", movieId.ToString());
 		}
