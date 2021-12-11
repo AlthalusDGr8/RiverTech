@@ -24,7 +24,7 @@
 		/// <summary>
 		/// The average User Rating
 		/// </summary>
-		public float AverageUserRating => (float)Math.Round(AllSubmittedRatings.Sum(x => x.Rating) / AllSubmittedRatings.Count);
+		public float AverageUserRating => (float)Math.Round(AllSubmittedRatings.Sum(x => x.Rating) / AllSubmittedRatings.Count, 1);
 	}
 
 

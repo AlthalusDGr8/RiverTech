@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
 using TechDemo.MoviesDb.Movies.Entities;
 
 namespace TechDemo.MoviesDb.API.EntityFramework
@@ -10,28 +9,16 @@ namespace TechDemo.MoviesDb.API.EntityFramework
 		public DbSet<Movie> Movies { get; set; }
 
 		public TechDemoEntityContext(DbContextOptions<TechDemoEntityContext> options) : base(options)
-		{						
-			
+		{
+			Database.EnsureCreated();
+			//Database.Migrate();
 		}
 
 		protected override void OnModelCreating(ModelBuilder modelBuilder)
 		{
-			//modelBuilder.Entity<Genre>().ToTable("LK_Genre");
-
-			//modelBuilder.Entity<Movie>().ToTable("Movie", "Movies");
-								//.HasMany(g => g.MovieGenres)
-								//.WithMany(m => m.MovieGenres)
-								//.UsingEntity<Dictionary<string, object>>("MovieGenre",
-								//	j => j.HasOne<Genre>()
-								//			.WithMany()
-								//			.HasForeignKey("GenreId")
-								//			.HasConstraintName("FK_MovieGenre_LK_Genre")
-								//			,
-								//	j => j
-								//		.HasOne<Movie>()
-								//		.WithMany()
-								//		.HasForeignKey("MovieId")
-								//		.HasConstraintName("FK_MovieGenre_Movie"));			
+			modelBuilder.Entity<Genre>().ToTable("LK_Genres", "Movies");
+			modelBuilder.Entity<Movie>().ToTable("Movies", "Movies")
+				.Navigation(e => e.Genres).AutoInclude();	
 		}
 
 

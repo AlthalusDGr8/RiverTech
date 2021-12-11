@@ -35,6 +35,6 @@ namespace TechDemo.MoviesDb.API.Models.Response
 		/// </summary>
 		public string ImgUrl { get; set; }
 
-		internal static string ConvertMovieLengthToRuntime(TimeSpan movieLength) => $"{movieLength.TotalHours} Hours and {movieLength.TotalMinutes} Minutes";
+		internal static string ConvertMovieLengthToRuntime(TimeSpan movieLength) => $"{movieLength.Hours} hrs and {movieLength.Minutes} minutes";
 	}
 }

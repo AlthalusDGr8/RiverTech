@@ -17,13 +17,13 @@ namespace TechDemo.MoviesDb.API.Controllers
 	[Route("api/genres")]
 	[ApiController]
 	public class GenresContoller : ControllerBase
-	{		
+	{	
 		private readonly IEntityRepo<Genre> _entityRepo;
 		private readonly ICacheManager _cacheManager;
 		public GenresContoller(IEntityRepo<Genre> entityRepo, ICacheManager cacheManager)
 		{
 			_entityRepo = entityRepo;
-			_cacheManager = cacheManager;
+			_cacheManager = cacheManager;			
 		}
 
 
@@ -34,7 +34,7 @@ namespace TechDemo.MoviesDb.API.Controllers
 		[Route("")]
 		[HttpGet]
 		public async Task<IEnumerable<GenreResponseModel>> GetAllGenres(CancellationToken cancellationToken)
-		{
+		{			
 			var alreadyCached = _cacheManager.GetFromCache<IEnumerable<GenreResponseModel>>("ALL_GENRES");
 			if (alreadyCached == null)
 			{
