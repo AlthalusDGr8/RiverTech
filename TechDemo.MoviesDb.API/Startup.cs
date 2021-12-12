@@ -1,7 +1,5 @@
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -9,17 +7,13 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using System;
 using System.IO;
-using System.Net;
 using System.Reflection;
-using System.Text.Json;
-using TechDemo.MoviesDb.API.EntityFramework;
-using TechDemo.MoviesDb.API.Models.Response;
 using TechDemo.MoviesDb.Caching.Memory;
 using TechDemo.MoviesDb.Core.Caching;
 using TechDemo.MoviesDb.Core.DbEntities;
-using TechDemo.MoviesDb.Core.Exceptions;
+using TechDemo.MoviesDb.EntityFrameworkCore.Context;
+using TechDemo.MoviesDb.EntityFrameworkCore.Repos;
 using TechDemo.MoviesDb.Movies.Definitions;
-using TechDemo.MoviesDb.Movies.Entities;
 using TechDemo.MoviesDb.Movies.Managers;
 using TechDemo.MoviesDb.Orleans.Managers;
 
@@ -43,13 +37,11 @@ namespace TechDemo.MoviesDb.API
 			services.AddSingleton<ICacheManager, MemoryCacheManager>();
 			
 			// Database stuff
-			services.
-				AddDbContextFactory<TechDemoEntityContext>(options => 
-			options.UseSqlServer(Configuration.GetConnectionString("TechDemo")));
+			services.AddDbContext<TechDemoEntityContext>(options =>
+				options.UseSqlServer(Configuration.GetConnectionString("TechDemo")));
 
-			// Entities
-			services.AddScoped<IEntityRepo<Genre>, GenreRepository>();
-			services.AddScoped<IEntityRepo<Movie>, MovieRepository>();
+			// Genreic registration for entity repo
+			services.AddScoped(typeof(IEntityRepo<>), typeof(AbstractEFDbContextEntityRepo<>));
 
 			// Managers
 			services.AddTransient<IMovieManger, MovieManager>();

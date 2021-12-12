@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using TechDemo.MoviesDb.Movies.Entities;
 
-namespace TechDemo.MoviesDb.API.EntityFramework
+namespace TechDemo.MoviesDb.EntityFrameworkCore.Context
 {
 	public class TechDemoEntityContext : DbContext
 	{
@@ -10,15 +10,13 @@ namespace TechDemo.MoviesDb.API.EntityFramework
 
 		public TechDemoEntityContext(DbContextOptions<TechDemoEntityContext> options) : base(options)
 		{
-			Database.EnsureCreated();
-			//Database.Migrate();
+
 		}
 
 		protected override void OnModelCreating(ModelBuilder modelBuilder)
 		{
 			modelBuilder.Entity<Genre>().ToTable("LK_Genres", "Movies");
-			modelBuilder.Entity<Movie>().ToTable("Movies", "Movies")
-				.Navigation(e => e.Genres).AutoInclude();	
+			modelBuilder.Entity<Movie>().ToTable("Movies", "Movies").Navigation(e => e.Genres).AutoInclude();
 		}
 
 

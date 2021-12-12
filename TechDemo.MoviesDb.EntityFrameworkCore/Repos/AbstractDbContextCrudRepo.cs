@@ -1,21 +1,21 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using TechDemo.MoviesDb.Core.DbEntities;
 using TechDemo.MoviesDb.Core.Extentions;
+using TechDemo.MoviesDb.EntityFrameworkCore.Context;
 
-namespace TechDemo.MoviesDb.EntityFrameworkCore
+namespace TechDemo.MoviesDb.EntityFrameworkCore.Repos
 {
-	public abstract class AbstractEFDbContextEntityRepo<TEntity, TDbContext> : IEntityRepo<TEntity>
-		where TDbContext : DbContext
+	public class AbstractEFDbContextEntityRepo<TEntity> : IEntityRepo<TEntity>
 		where TEntity : class, IEntity, new()
 	{
-		protected readonly TDbContext Context;
+		protected readonly TechDemoEntityContext Context;
 
 		private DbSet<TEntity> GetDbSet()
 		{
 			return Context.Set<TEntity>();
 		}
 
-		public AbstractEFDbContextEntityRepo(TDbContext context)
+		public AbstractEFDbContextEntityRepo(TechDemoEntityContext context)
 		{
 			Context = context;
 		}
@@ -40,9 +40,7 @@ namespace TechDemo.MoviesDb.EntityFrameworkCore
 				var found = await set.FindAsync(entity.Id, cancellationToken);
 
 				if (found != null)
-				{
 					entity.CopyPropertiesTo(found, "Id");
-				}
 				else
 				{
 					set.Attach(entity);
@@ -55,7 +53,7 @@ namespace TechDemo.MoviesDb.EntityFrameworkCore
 
 			return entry.Entity;
 		}
-		
+
 		public async Task<IEnumerable<TEntity>> GetAllAsync(CancellationToken cancellationToken)
 		{
 			var list = await GetDbSet().ToListAsync(cancellationToken);

@@ -8,10 +8,12 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\TechDemo.MoviesDb.Core\TechDemo.MoviesDb.Core.csproj" />
+    <ProjectReference Include="..\TechDemo.MoviesDb.Movies\TechDemo.MoviesDb.Movies.csproj" />
   </ItemGroup>
 
 </Project>
