@@ -1,4 +1,4 @@
-DECLARE @current NVARCHAR(256);
+﻿DECLARE @current NVARCHAR(256);
 DECLARE @snapshotSettings NVARCHAR(612);
 
 SELECT @current = N'[' + (SELECT DB_NAME()) + N']';

@@ -1,4 +1,4 @@
-CREATE TABLE OrleansStorage
+﻿CREATE TABLE OrleansStorage
 (
     -- These are for the book keeping. Orleans calculates
     -- these hashes (see RelationalStorageProvide implementation),

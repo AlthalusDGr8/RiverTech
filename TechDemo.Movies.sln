@@ -11,15 +11,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tools", "tools", "{C5911799
 		readme.md = readme.md
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Movies.Server.APIS", "Movies.Server.APIS\Movies.Server.APIS.csproj", "{823A8BF6-1310-4B1A-96B5-4F1E0B8F43F8}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "MyStuff", "MyStuff", "{614328F0-0997-4167-A212-FBD1DE564D10}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Movies.CentralCore", "Movies.CentralCore\Movies.CentralCore.csproj", "{FFB4E581-E39B-4EB4-A6C8-8CA045D20A1E}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Movies.Entities.Core", "Movies.Entities.Core\Movies.Entities.Core.csproj", "{FC171456-C1BE-405E-BAA2-DD50D132DA8C}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Movies.Entities.Movie", "Movies.Entities.Movie\Movies.Entities.Movie.csproj", "{2707FD59-DF63-4219-A2AA-F1032120B95F}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TechDemo.MoviesDb.Core", "TechDemo.MoviesDb.Core\TechDemo.MoviesDb.Core.csproj", "{7FE59739-E41B-45F1-B2A4-E4CE089799B5}"
 EndProject
@@ -33,7 +25,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TechDemo.MoviesDb.Caching.M
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TechDemo.MoviesDb.Orleans", "TechDemo.MoviesDb.Orleans\TechDemo.MoviesDb.Orleans.csproj", "{CCE453C7-321E-4261-91FD-171DB83D597E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TechDemo.MoviesDb.GraphQL", "TechDemo.MoviesDb.GraphQL\TechDemo.MoviesDb.GraphQL.csproj", "{06575234-2E2A-4EEF-8858-57349FBD1BD0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TechDemo.MoviesDb.GraphQL", "TechDemo.MoviesDb.GraphQL\TechDemo.MoviesDb.GraphQL.csproj", "{06575234-2E2A-4EEF-8858-57349FBD1BD0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -41,22 +33,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{823A8BF6-1310-4B1A-96B5-4F1E0B8F43F8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{823A8BF6-1310-4B1A-96B5-4F1E0B8F43F8}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{823A8BF6-1310-4B1A-96B5-4F1E0B8F43F8}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{823A8BF6-1310-4B1A-96B5-4F1E0B8F43F8}.Release|Any CPU.Build.0 = Release|Any CPU
-		{FFB4E581-E39B-4EB4-A6C8-8CA045D20A1E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{FFB4E581-E39B-4EB4-A6C8-8CA045D20A1E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{FFB4E581-E39B-4EB4-A6C8-8CA045D20A1E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{FFB4E581-E39B-4EB4-A6C8-8CA045D20A1E}.Release|Any CPU.Build.0 = Release|Any CPU
-		{FC171456-C1BE-405E-BAA2-DD50D132DA8C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{FC171456-C1BE-405E-BAA2-DD50D132DA8C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{FC171456-C1BE-405E-BAA2-DD50D132DA8C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{FC171456-C1BE-405E-BAA2-DD50D132DA8C}.Release|Any CPU.Build.0 = Release|Any CPU
-		{2707FD59-DF63-4219-A2AA-F1032120B95F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{2707FD59-DF63-4219-A2AA-F1032120B95F}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{2707FD59-DF63-4219-A2AA-F1032120B95F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{2707FD59-DF63-4219-A2AA-F1032120B95F}.Release|Any CPU.Build.0 = Release|Any CPU
 		{7FE59739-E41B-45F1-B2A4-E4CE089799B5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{7FE59739-E41B-45F1-B2A4-E4CE089799B5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7FE59739-E41B-45F1-B2A4-E4CE089799B5}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -90,10 +66,6 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{823A8BF6-1310-4B1A-96B5-4F1E0B8F43F8} = {614328F0-0997-4167-A212-FBD1DE564D10}
-		{FFB4E581-E39B-4EB4-A6C8-8CA045D20A1E} = {614328F0-0997-4167-A212-FBD1DE564D10}
-		{FC171456-C1BE-405E-BAA2-DD50D132DA8C} = {614328F0-0997-4167-A212-FBD1DE564D10}
-		{2707FD59-DF63-4219-A2AA-F1032120B95F} = {614328F0-0997-4167-A212-FBD1DE564D10}
 		{7FE59739-E41B-45F1-B2A4-E4CE089799B5} = {614328F0-0997-4167-A212-FBD1DE564D10}
 		{FDF662CB-565E-4E69-AEE2-8A43DAD60945} = {614328F0-0997-4167-A212-FBD1DE564D10}
 		{EC8ABBA2-DE57-47A5-A8B9-2887F38DE268} = {614328F0-0997-4167-A212-FBD1DE564D10}
