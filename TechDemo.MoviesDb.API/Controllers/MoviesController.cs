@@ -30,7 +30,7 @@ namespace TechDemo.MoviesDb.API.Controllers
 		/// <param name="id"></param>
 		/// <param name="cancellationToken"></param>
 		/// <returns></returns>
-		[Route("/{id:long}/")]
+		[Route("{id:long}")]
 		[HttpGet]
 		public async Task<MovieResponseModel> GetMovie([FromRoute] long id, CancellationToken cancellationToken)
 		{
@@ -46,7 +46,7 @@ namespace TechDemo.MoviesDb.API.Controllers
 		/// <param name="takeRecords">Number of records to return</param>
 		/// <param name="cancellationToken"></param>
 		/// <returns></returns>
-		[Route("/toprated/")]
+		[Route("toprated")]
 		[HttpGet]
 		public async Task<IEnumerable<MovieResponseModel>> GetTopRatedMovies([FromQuery] int skipRecords, [FromQuery] int takeRecords, CancellationToken cancellationToken)
 		{
@@ -66,7 +66,7 @@ namespace TechDemo.MoviesDb.API.Controllers
 		/// <param name="id"></param>
 		/// <param name="cancellationToken"></param>
 		/// <returns></returns>
-		[Route("/{id:long}/GetUserRating")]
+		[Route("{id:long}/GetUserRating")]
 		[HttpGet]
 		public async Task<float> GetUserRatingForMovie([FromRoute]long id, CancellationToken cancellationToken)
 		{
@@ -81,7 +81,7 @@ namespace TechDemo.MoviesDb.API.Controllers
 		/// <param name="newRating">New User Rating</param>
 		/// <param name="cancellationToken"></param>
 		/// <returns></returns>
-		[Route("/{id:long}/SubmitNewRating")]
+		[Route("{id:long}/SubmitNewRating")]
 		[HttpPost]
 		public async Task SubmitNewUserRating([FromRoute] long id, float newRating, CancellationToken cancellationToken)
 		{
