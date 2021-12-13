@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using TechDemo.MoviesDb.API.Models.Response;
@@ -34,18 +35,30 @@ namespace TechDemo.MoviesDb.API.Controllers
 		public async Task<MovieResponseModel> GetMovie([FromRoute] long id, CancellationToken cancellationToken)
 		{
 			var foundMovie = await _movieManger.GetMovieById(id, cancellationToken);
-			return new MovieResponseModel()
-			{
-				CriticRating = foundMovie.CriticRating,
-				Description = foundMovie.Description,
-				GenreCodes = foundMovie.GenreCodes,
-				Id = foundMovie.Id,
-				ImgUrl = foundMovie.ImgUrl,
-				Name = foundMovie.Name,
-				RunTime = MovieResponseModel.ConvertMovieLengthToRuntime(foundMovie.Length)
-			};
+			return MovieResponseModel.ConvertToMovieResponseModel(foundMovie);
 		}
 
+
+		/// <summary>
+		/// Returns movie details
+		/// </summary>
+		/// <param name="skipRecords">Number of records to skip</param>
+		/// <param name="takeRecords">Number of records to return</param>
+		/// <param name="cancellationToken"></param>
+		/// <returns></returns>
+		[Route("/toprated/")]
+		[HttpGet]
+		public async Task<IEnumerable<MovieResponseModel>> GetTopRatedMovies([FromQuery] int skipRecords, [FromQuery] int takeRecords, CancellationToken cancellationToken)
+		{
+			List<MovieResponseModel> results = new List<MovieResponseModel>(0);
+			var foundMovies = await _movieManger.GetTopRatedMovies(skipRecords, takeRecords, cancellationToken);
+			foreach (var item in foundMovies)
+			{
+				results.Add(MovieResponseModel.ConvertToMovieResponseModel(item));
+			}
+			
+			return results;
+		}
 
 		/// <summary>
 		/// Returns a user rating for the movie

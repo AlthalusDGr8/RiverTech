@@ -28,15 +28,38 @@ namespace TechDemo.MoviesDb.Movies.Managers
 			if (result == null)
 				throw new MovieIdNotExistsException(movieId, $"The movie with id {movieId} does not exist");
 
-			return new MovieDTO() {
-				Id = result.Id,
-				Description = result.Description,
-				GenreCodes =  result.Genres.Select(x => x.Code),
-				ImgUrl = result.ImgUrl,
-				Length = TimeSpan.FromMinutes(result.Length),
-				Name = result.Name,
-				CriticRating = result.CriticRating,
-				UniqueKey = result.UniqueKey };			
+			return MovieDTO.ConvertFromMovie(result);
 		}
+
+
+		/// <summary>
+		/// Returns the number of top rated movies
+		/// </summary>
+		/// <param name="skipRecords">The number of records to skip</param>
+		/// <param name="takeRecords">The number of records tor eturn</param>
+		/// <param name="cancellationToken">Cancelation token</param>
+		/// <returns></returns>
+		public async Task<IEnumerable<MovieDTO>> GetTopRatedMovies(int skipRecords, int takeRecords, CancellationToken cancellationToken)
+		{
+			List<MovieDTO> returnValue = new List<MovieDTO>(0);
+			var result = await _entityRepo.GetByCustomParams(
+							null,
+							x => x.OrderBy(y => y.CriticRating),
+							null,
+							skipRecords,
+							takeRecords, cancellationToken);
+			
+			// Return empty list if nothing is found
+			if ((result == null) || (!result.Any()))
+				return returnValue;
+
+			foreach (Movie item in result)
+			{
+				returnValue.Add(MovieDTO.ConvertFromMovie(item));
+			}
+
+			return returnValue;
+		}
+
 	}
 }

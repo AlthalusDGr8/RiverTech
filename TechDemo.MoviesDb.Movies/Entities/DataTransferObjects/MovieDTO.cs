@@ -41,5 +41,17 @@
 		/// A lost of codes representing genres
 		/// </summary>
 		public IEnumerable<string> GenreCodes { get; set; }
+
+		internal static MovieDTO ConvertFromMovie(Movie movie) => new MovieDTO()
+		{
+			Id = movie.Id,
+			Description = movie.Description,
+			GenreCodes = movie.Genres.Select(x => x.Code),
+			ImgUrl = movie.ImgUrl,
+			Length = TimeSpan.FromMinutes(movie.Length),
+			Name = movie.Name,
+			CriticRating = movie.CriticRating,
+			UniqueKey = movie.UniqueKey
+		};
 	}
 }

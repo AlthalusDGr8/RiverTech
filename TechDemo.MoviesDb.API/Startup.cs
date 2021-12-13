@@ -55,12 +55,11 @@ namespace TechDemo.MoviesDb.API
 			services.AddGraphQL((options, provider) =>
 			{
 				var logger = provider.GetRequiredService<ILogger<Startup>>();
-				options.UnhandledExceptionDelegate = ctx => logger.LogError("{Error} occurred", ctx.OriginalException.Message);
+				options.UnhandledExceptionDelegate = ctx => logger.LogError("{Error} occurred", ctx.OriginalException);
 			})
 			.AddGraphTypes(typeof(MovieSchema), ServiceLifetime.Scoped)
 			// Add required services for GraphQL request/response de/serialization
-			.AddSystemTextJson();			
-			
+			.AddSystemTextJson();						
 			services.Configure<IISServerOptions>(options => options.AllowSynchronousIO = true);
 
 

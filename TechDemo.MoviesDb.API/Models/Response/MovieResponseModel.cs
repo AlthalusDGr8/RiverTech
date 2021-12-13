@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using TechDemo.MoviesDb.Movies.Entities.DataTransferObjects;
 
 namespace TechDemo.MoviesDb.API.Models.Response
 {
@@ -35,6 +36,18 @@ namespace TechDemo.MoviesDb.API.Models.Response
 		/// </summary>
 		public string ImgUrl { get; set; }
 
-		internal static string ConvertMovieLengthToRuntime(TimeSpan movieLength) => $"{movieLength.Hours} hrs and {movieLength.Minutes} minutes";
+
+		internal static MovieResponseModel ConvertToMovieResponseModel(MovieDTO movieDTO) => new MovieResponseModel()
+		{
+			CriticRating = movieDTO.CriticRating,
+			Description = movieDTO.Description,
+			GenreCodes = movieDTO.GenreCodes,
+			Id = movieDTO.Id,
+			ImgUrl = movieDTO.ImgUrl,
+			Name = movieDTO.Name,
+			RunTime = ConvertMovieLengthToRuntime(movieDTO.Length)
+		};
+
+		private static string ConvertMovieLengthToRuntime(TimeSpan movieLength) => $"{movieLength.Hours} hrs and {movieLength.Minutes} minutes";
 	}
 }
