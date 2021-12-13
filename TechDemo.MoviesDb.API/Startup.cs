@@ -1,9 +1,11 @@
+using GraphQL.Server;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using System;
 using System.IO;
@@ -13,6 +15,7 @@ using TechDemo.MoviesDb.Core.Caching;
 using TechDemo.MoviesDb.Core.DbEntities;
 using TechDemo.MoviesDb.EntityFrameworkCore.Context;
 using TechDemo.MoviesDb.EntityFrameworkCore.Repos;
+using TechDemo.MoviesDb.GraphQL.GraphSchema;
 using TechDemo.MoviesDb.Movies.Definitions;
 using TechDemo.MoviesDb.Movies.Managers;
 using TechDemo.MoviesDb.Orleans.Managers;
@@ -32,7 +35,7 @@ namespace TechDemo.MoviesDb.API
 		// This method gets called by the runtime. Use this method to add services to the container.
 		// For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
 		public void ConfigureServices(IServiceCollection services)
-        {
+        {			
 			// Cache Manager
 			services.AddSingleton<ICacheManager, MemoryCacheManager>();
 			
@@ -47,6 +50,19 @@ namespace TechDemo.MoviesDb.API
 			services.AddTransient<IMovieManger, MovieManager>();
 			services.AddTransient<IUserMovieRatingManager, UserMovieRatingManager>();
 
+			//graphql stuff			
+			services.AddScoped<MovieSchema>();
+			services.AddGraphQL((options, provider) =>
+			{
+				var logger = provider.GetRequiredService<ILogger<Startup>>();
+				options.UnhandledExceptionDelegate = ctx => logger.LogError("{Error} occurred", ctx.OriginalException.Message);
+			})
+			.AddGraphTypes(typeof(MovieSchema), ServiceLifetime.Scoped)
+			// Add required services for GraphQL request/response de/serialization
+			.AddSystemTextJson();			
+			
+			services.Configure<IISServerOptions>(options => options.AllowSynchronousIO = true);
+
 
 			//Added swagger elements for eaiser debugging and demo
 			services.AddMvcCore().AddApiExplorer();
@@ -57,8 +73,7 @@ namespace TechDemo.MoviesDb.API
 				var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
 				var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
 				c.IncludeXmlComments(xmlPath);
-			});
-
+			});								
 		}
 
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -103,6 +118,14 @@ namespace TechDemo.MoviesDb.API
 			//		);
 			//});
 
+
+			// use HTTP middleware for ChatSchema at default path /graphql
+			app.UseGraphQL<MovieSchema>();
+
+			// use GraphiQL middleware at default path /ui/graphiql with default options
+			app.UseGraphQLGraphiQL();
+
+			app.UseGraphQLPlayground();
 
 			app.UseRouting();
 

@@ -8,6 +8,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="GraphQL.Server.Transports.AspNetCore" Version="5.1.1" />
+    <PackageReference Include="GraphQL.Server.Transports.AspNetCore.SystemTextJson" Version="5.1.1" />
+    <PackageReference Include="GraphQL.Server.Ui.GraphiQL" Version="5.1.1" />
+    <PackageReference Include="GraphQL.Server.Ui.Playground" Version="5.1.1" />
     <PackageReference Include="Microsoft.Orleans.OrleansProviders" Version="3.5.1" />
     <PackageReference Include="Microsoft.Orleans.OrleansRuntime" Version="3.5.1" />
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.14.0" />
@@ -19,6 +23,7 @@
   <ItemGroup>
     <ProjectReference Include="..\TechDemo.MoviesDb.Caching.Memory\TechDemo.MoviesDb.Caching.Memory.csproj" />
     <ProjectReference Include="..\TechDemo.MoviesDb.EntityFrameworkCore\TechDemo.MoviesDb.EntityFrameworkCore.csproj" />
+    <ProjectReference Include="..\TechDemo.MoviesDb.GraphQL\TechDemo.MoviesDb.GraphQL.csproj" />
     <ProjectReference Include="..\TechDemo.MoviesDb.Movies\TechDemo.MoviesDb.Movies.csproj" />
     <ProjectReference Include="..\TechDemo.MoviesDb.Orleans\TechDemo.MoviesDb.Orleans.csproj" />
   </ItemGroup>

@@ -14,7 +14,7 @@ namespace TechDemo.MoviesDb.EntityFrameworkCore.Repos
 		{
 			return Context.Set<TEntity>();
 		}
-
+		
 		public AbstractEFDbContextEntityRepo(TechDemoEntityContext context)
 		{
 			Context = context;
@@ -37,7 +37,7 @@ namespace TechDemo.MoviesDb.EntityFrameworkCore.Repos
 			{
 				var set = GetDbSet();
 
-				var found = await set.FindAsync(entity.Id, cancellationToken);
+				var found = await set.FindAsync(new object?[] { entity.Id, cancellationToken }, cancellationToken: cancellationToken);
 
 				if (found != null)
 					entity.CopyPropertiesTo(found, "Id");
