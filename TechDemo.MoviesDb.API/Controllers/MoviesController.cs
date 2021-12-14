@@ -1,13 +1,11 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using TechDemo.MoviesDb.API.Models.Request;
 using TechDemo.MoviesDb.API.Models.Response;
 using TechDemo.MoviesDb.Movies.Definitions;
-using TechDemo.MoviesDb.Movies.Entities.DataTransferObjects;
 
 namespace TechDemo.MoviesDb.API.Controllers
 {
@@ -26,6 +24,34 @@ namespace TechDemo.MoviesDb.API.Controllers
 			_movieManger = movieManger;
 		}
 
+
+		/// <summary>
+		/// Returns a list of movies ordered  by id
+		/// </summary>
+		/// <param name="skip">Number of rows to skip (for paging)</param>
+		/// <param name="take">Number of rows to take (for paging)</param>
+		/// <param name="cancellationToken"></param>
+		/// <returns></returns>
+		[Route("")]
+		[HttpGet]
+		public async Task<IEnumerable<MovieResponseModel>> ListMovies([FromQuery] int? skip, [FromQuery]int? take,  CancellationToken cancellationToken)
+		{
+			var response = new List<MovieResponseModel>(0);
+			var result = await _movieManger.GetMovies(skip, take, cancellationToken);
+			foreach (var item in result)
+			{
+				response.Add(MovieResponseModel.ConvertToMovieResponseModel(item));
+			}
+
+			return response;
+		}
+
+		/// <summary>
+		/// Submits a new movie to the store
+		/// </summary>
+		/// <param name="newMovie">Details about the new movie</param>
+		/// <param name="cancellationToken"></param>
+		/// <returns></returns>
 		[Route("")]
 		[HttpPost]
 		public async Task<long> SubmitNewMovie([FromBody] NewMovieRequestModel newMovie, CancellationToken cancellationToken)
@@ -49,12 +75,25 @@ namespace TechDemo.MoviesDb.API.Controllers
 			return MovieResponseModel.ConvertToMovieResponseModel(foundMovie);
 		}
 
+		/// <summary>
+		/// Update Movie Details
+		/// </summary>
+		/// <param name="id">Id of the movie to change</param>
+		/// <param name="cancellationToken"></param>
+		/// <returns></returns>
+		[Route("{id:long}")]
+		[HttpPatch]
+		public async Task UpdateMovie([FromRoute] long id, [FromBody] NewMovieRequestModel newMovieRequestModel, CancellationToken cancellationToken)
+		{
+			 _movieManger.UpdateMovieById(id,  NewMovieRequestModel.ConvertToMovieDTO(newMovieRequestModel), cancellationToken);			
+		}
+
 
 		/// <summary>
 		/// Returns movie details
 		/// </summary>
-		/// <param name="skipRecords">Number of records to skip</param>
-		/// <param name="takeRecords">Number of records to return</param>
+		/// <param name="skipRecords">Number of records to skip (for paging)</param>
+		/// <param name="takeRecords">Number of records to return (for paging)</param>
 		/// <param name="cancellationToken"></param>
 		/// <returns></returns>
 		[Route("toprated")]

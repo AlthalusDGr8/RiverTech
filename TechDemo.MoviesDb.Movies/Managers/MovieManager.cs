@@ -133,5 +133,31 @@ namespace TechDemo.MoviesDb.Movies.Managers
 			return returnValue;
 		}
 
+		/// <summary>
+		/// Returns the full movie list
+		/// </summary>
+		/// <param name="skipRecords">The number of records to skip</param>
+		/// <param name="takeRecords">The number of records to return</param>
+		/// <param name="cancellationToken"></param>
+		/// <returns></returns>
+		public async Task<IEnumerable<MovieDTO>> GetMovies(int? skipRecords, int? takeRecords, CancellationToken cancellationToken)
+		{
+			List<MovieDTO> returnValue = new List<MovieDTO>(0);
+			var result = await _entityRepo.GetByCustomParams(null, x => x.OrderBy( y => y.MovieId), null,skipRecords,takeRecords, cancellationToken);
+
+			// Return empty list if nothing is found
+			if ((result == null) || (!result.Any()))
+				return returnValue;
+
+			foreach (Movie item in result)
+			{
+				returnValue.Add(MovieDTO.ConvertFromMovie(item));
+			}
+
+			return returnValue;
+
+		}
+
+		public Task UpdateMovieById(long movieId, MovieDTO updatedMovieDetails, CancellationToken cancellationToken) => throw new NotImplementedException();
 	}
 }

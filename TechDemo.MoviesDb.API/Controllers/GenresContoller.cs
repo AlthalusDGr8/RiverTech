@@ -30,7 +30,7 @@ namespace TechDemo.MoviesDb.API.Controllers
 		public async Task<IEnumerable<GenreResponseModel>> GetAllGenres(CancellationToken cancellationToken)
 		{
 			var allGenres =  await _genreManager.GetAll(cancellationToken);
-			List<GenreResponseModel> genreResponseModels = new List<GenreResponseModel>(0);
+			var genreResponseModels = new List<GenreResponseModel>(0);
 			foreach (var genre in allGenres)
 			{
 				genreResponseModels.Add(GenreResponseModel.ConverFromGenreDTO(genre));
