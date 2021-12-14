@@ -1,4 +1,6 @@
-﻿namespace TechDemo.MoviesDb.API.Models.Response
+﻿using TechDemo.MoviesDb.Movies.Entities.DataTransferObjects;
+
+namespace TechDemo.MoviesDb.API.Models.Response
 {
 	public class GenreResponseModel
 	{
@@ -16,6 +18,8 @@
 		/// Returns the approp display name 
 		/// </summary>
 		public string DisplayName { get; set; }
+
+		internal static GenreResponseModel ConverFromGenreDTO(GenreDTO genreDTO) => new GenreResponseModel() { Id = genreDTO.Id, DisplayName = genreDTO.Description, Code = genreDTO.Code };
 
 	}
 }

@@ -4,6 +4,15 @@ namespace TechDemo.MoviesDb.Movies.Definitions
 {
 	public interface IMovieManger
 	{
+
+		/// <summary>
+		/// Creates a new Movie in the system and returns the id
+		/// </summary>
+		/// <param name="newMovieDetails">The new details</param>
+		/// <param name="cancellationToken">Cancellation Token</param>
+		/// <returns></returns>
+		public Task<long> CreateNewMovie(MovieDTO newMovieDetails, CancellationToken cancellationToken);
+
 		/// <summary>
 		/// Returns a movie if present 
 		/// </summary>
@@ -11,7 +20,7 @@ namespace TechDemo.MoviesDb.Movies.Definitions
 		/// <returns>Thhe movie detials if found</returns>
 		/// <exception cref="MovieIdNotExistsException">Thrown when a movie with specified ID does not exist</exception>
 		public Task<MovieDTO> GetMovieById(long movieId, CancellationToken cancellationToken);
-
+		
 		/// <summary>
 		/// Return the top rated mvies based on the number of skipand take records
 		/// </summary>

@@ -48,6 +48,7 @@ namespace TechDemo.MoviesDb.API
 
 			// Managers
 			services.AddTransient<IMovieManger, MovieManager>();
+			services.AddTransient<IGenreManager, GenreManager>();
 			services.AddTransient<IUserMovieRatingManager, UserMovieRatingManager>();
 
 			//graphql stuff			

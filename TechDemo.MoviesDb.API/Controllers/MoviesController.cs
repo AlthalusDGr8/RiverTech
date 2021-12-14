@@ -1,10 +1,13 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using TechDemo.MoviesDb.API.Models.Request;
 using TechDemo.MoviesDb.API.Models.Response;
 using TechDemo.MoviesDb.Movies.Definitions;
+using TechDemo.MoviesDb.Movies.Entities.DataTransferObjects;
 
 namespace TechDemo.MoviesDb.API.Controllers
 {
@@ -22,6 +25,13 @@ namespace TechDemo.MoviesDb.API.Controllers
 			_userMovieRatingManager = userMovieRatingManager;
 			_movieManger = movieManger;
 		}
+
+
+		public async Task<long> SubmitNewMovie([FromBody] NewMovieRequestModel newMovie, CancellationToken cancellationToken)
+		{
+			return await _movieManger.CreateNewMovie(NewMovieRequestModel.ConvertToMovieDTO(newMovie), cancellationToken);
+		}
+
 
 
 		/// <summary>

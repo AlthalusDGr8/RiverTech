@@ -23,6 +23,12 @@ namespace TechDemo.MoviesDb.Movies.Exceptions
 			ExtraDetails.Add("Id", id.ToString());	
 		}
 
+
+		public GenreNotExistsException(string code, string message, Exception innerException = null) : base(message, innerException)
+		{
+			ExtraDetails.Add("Code", code);
+		}
+
 		public override string UniqueErrorCode => "GENRE_NOT_EXISTS";
 	}
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using TechDemo.MoviesDb.Movies.Entities.DataTransferObjects;
 
 namespace TechDemo.MoviesDb.API.Models.Request
 {
@@ -28,5 +29,20 @@ namespace TechDemo.MoviesDb.API.Models.Request
 		/// Image URl
 		/// </summary>
 		public string ImgUrl { get; set; }
+
+		/// <summary>
+		/// COnverts a request model into a DTO
+		/// </summary>
+		/// <param name="newMovieRequestModel"></param>
+		/// <returns></returns>
+		internal static MovieDTO ConvertToMovieDTO(NewMovieRequestModel newMovieRequestModel) => new MovieDTO()
+		{
+			CriticRating = newMovieRequestModel.Rating,
+			Description = newMovieRequestModel.Description,
+			GenreCodes = newMovieRequestModel.Genres,
+			ImgUrl = newMovieRequestModel.ImgUrl,
+			Length = TimeSpan.FromMinutes(newMovieRequestModel.RunTimeInMinutes),
+			Name = newMovieRequestModel.Name
+		};
 	}
 }

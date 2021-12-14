@@ -9,10 +9,59 @@ namespace TechDemo.MoviesDb.Movies.Managers
 	public class MovieManager : IMovieManger
 	{
 		private readonly IEntityRepo<Movie> _entityRepo;
-		public MovieManager(IEntityRepo<Movie> entityRepo)
+		private readonly IGenreManager _genreManager;
+		public MovieManager(IEntityRepo<Movie> entityRepo, IGenreManager genreManager)
 		{
 			_entityRepo = entityRepo;
+			_genreManager = genreManager;
 		}
+
+		public Task<long> CreateNewMovie(MovieDTO newMovieDetails, CancellationToken cancellationToken)
+		{
+			// If movie run time is less then 1 minute then throw exception
+			if (newMovieDetails.Length.TotalMinutes < 1)
+				throw new InvalidFieldLengthException(nameof(newMovieDetails.Length.TotalMinutes), newMovieDetails.Length.TotalMinutes.ToString(), 1, 999, "Run time cannot be less then 1 minute");
+
+			if (newMovieDetails.CriticRating < 1)
+				throw new InvalidFieldLengthException(nameof(newMovieDetails.CriticRating), newMovieDetails.CriticRating.ToString(), 1, 10, "Rating cannot be less then 1");
+
+			if (newMovieDetails.CriticRating > 10)
+				throw new InvalidFieldLengthException(nameof(newMovieDetails.CriticRating), newMovieDetails.CriticRating.ToString(), 1, 10, "Rating cannot be more then 10");
+
+			if (string.IsNullOrEmpty(newMovieDetails.Name.Trim()))
+				throw new InvalidFieldValueException(nameof(newMovieDetails.Name), newMovieDetails.Name, "Name cannot be empty");
+
+			// need to verify if the genres provided are part of our lookups
+			foreach (var item in newMovieDetails.GenreCodes)
+			{
+				try
+				{
+					var checkGenreExists = _genreManager.GetByCode(item, cancellationToken);
+				}
+				catch (GenreNotExistsException exp)
+				{
+					throw new InvalidFieldValueException("Genre", item, "Genre does not exist", exp);					
+				}									
+			}
+
+			// all checks have passed, let us now proceed to create the entity
+			var newMovieEntity = new Movie() { 
+				CriticRating = newMovieDetails.CriticRating, 
+				Description = newMovieDetails.Description, 
+				ImgUrl = newMovieDetails.ImgUrl, 
+				Length = (int)newMovieDetails.Length.TotalMinutes,
+				Name = newMovieDetails.Name };
+
+			newMovieDetails.UniqueKey = GenerateMovieUniqueKey(newMovieDetails.Name);
+		}
+
+		private string GenerateMovieUniqueKey(string movieName)
+		{
+			string finalResult = movieName;
+
+			return finalResult;
+		}
+		
 
 		/// <summary>
 		/// Fetches a movie by id

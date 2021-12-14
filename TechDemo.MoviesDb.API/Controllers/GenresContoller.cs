@@ -1,13 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using TechDemo.MoviesDb.API.Models.Response;
-using TechDemo.MoviesDb.Core.Caching;
-using TechDemo.MoviesDb.Core.DbEntities;
-using TechDemo.MoviesDb.Movies.Entities;
-using TechDemo.MoviesDb.Movies.Exceptions;
+using TechDemo.MoviesDb.Movies.Definitions;
 
 namespace TechDemo.MoviesDb.API.Controllers
 {
@@ -18,12 +14,10 @@ namespace TechDemo.MoviesDb.API.Controllers
 	[ApiController]
 	public class GenresContoller : ControllerBase
 	{	
-		private readonly IEntityRepo<Genre> _entityRepo;
-		private readonly ICacheManager _cacheManager;
-		public GenresContoller(IEntityRepo<Genre> entityRepo, ICacheManager cacheManager)
+		private readonly IGenreManager _genreManager;		
+		public GenresContoller(IGenreManager genreManager)
 		{
-			_entityRepo = entityRepo;
-			_cacheManager = cacheManager;			
+			_genreManager = genreManager;			
 		}
 
 
@@ -34,16 +28,15 @@ namespace TechDemo.MoviesDb.API.Controllers
 		[Route("")]
 		[HttpGet]
 		public async Task<IEnumerable<GenreResponseModel>> GetAllGenres(CancellationToken cancellationToken)
-		{			
-			var alreadyCached = _cacheManager.GetFromCache<IEnumerable<GenreResponseModel>>("ALL_GENRES");
-			if (alreadyCached == null)
+		{
+			var allGenres =  await _genreManager.GetAll(cancellationToken);
+			List<GenreResponseModel> genreResponseModels = new List<GenreResponseModel>(0);
+			foreach (var genre in allGenres)
 			{
-				var allGenres = await _entityRepo.GetAllAsync(cancellationToken);
-				alreadyCached = allGenres.Select(x => new GenreResponseModel() { Id = x.Id, DisplayName = x.Description, Code = x.Code });
-				_cacheManager.SetInCache("ALL_GENRES", alreadyCached);
+				genreResponseModels.Add(GenreResponseModel.ConverFromGenreDTO(genre));
 			}
 
-			return alreadyCached;
+			return genreResponseModels;			
 		}
 
 		/// <summary>
@@ -54,11 +47,8 @@ namespace TechDemo.MoviesDb.API.Controllers
 		[HttpGet]
 		public async Task<GenreResponseModel> GetById([FromRoute]int id, CancellationToken cancellationToken)
 		{
-			var result = await _entityRepo.GetByKeyAsync(id, cancellationToken);
-			if(result != null)
-				return new GenreResponseModel() { Id = result.Id, DisplayName = result.Description, Code = result.Code };
-
-			throw new GenreNotExistsException(id, $"The Genre with id {id} does not exist");
+			var result = await _genreManager.GetById(id, cancellationToken);
+			return GenreResponseModel.ConverFromGenreDTO(result);		
 		}
 	}
 }
