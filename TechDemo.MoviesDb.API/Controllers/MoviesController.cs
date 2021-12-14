@@ -85,7 +85,7 @@ namespace TechDemo.MoviesDb.API.Controllers
 		[HttpPatch]
 		public async Task UpdateMovie([FromRoute] long id, [FromBody] NewMovieRequestModel newMovieRequestModel, CancellationToken cancellationToken)
 		{
-			 _movieManger.UpdateMovieById(id,  NewMovieRequestModel.ConvertToMovieDTO(newMovieRequestModel), cancellationToken);			
+			await _movieManger.UpdateMovieById(id,  NewMovieRequestModel.ConvertToMovieDTO(newMovieRequestModel), cancellationToken);			
 		}
 
 

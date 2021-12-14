@@ -21,8 +21,8 @@ namespace TechDemo.MoviesDb.Movies.Managers
 			_genreEntityRepo = genreEntityRepo;
 		}
 
-		public async Task<long> CreateNewMovie(MovieDTO newMovieDetails, CancellationToken cancellationToken)
-		{			
+		private async Task<ICollection<Genre>> ValidateDetails(MovieDTO newMovieDetails, CancellationToken cancellationToken = default)
+		{
 			// If movie run time is less then 1 minute then throw exception
 			if (newMovieDetails.Length.TotalMinutes < 1)
 				throw new InvalidFieldLengthException(nameof(newMovieDetails.Length.TotalMinutes), newMovieDetails.Length.TotalMinutes.ToString(), 1, 999, "Run time cannot be less then 1 minute");
@@ -37,7 +37,7 @@ namespace TechDemo.MoviesDb.Movies.Managers
 				throw new InvalidFieldValueException(nameof(newMovieDetails.Name), newMovieDetails.Name, "Name cannot be empty");
 
 			// need to verify if the genres provided are part of our lookups
-			var allGenres = await _genreEntityRepo.GetAllAsync();			
+			var allGenres = await _genreEntityRepo.GetAllAsync();
 			ICollection<Genre> foundGenreInstances = new List<Genre>(0);
 			foreach (var item in newMovieDetails.GenreCodes)
 			{
@@ -48,9 +48,34 @@ namespace TechDemo.MoviesDb.Movies.Managers
 				}
 				catch (GenreNotExistsException exp)
 				{
-					throw new InvalidFieldValueException("Genre", item, "Genre does not exist", exp);					
-				}									
+					throw new InvalidFieldValueException("Genre", item, "Genre does not exist", exp);
+				}
 			}
+
+			return foundGenreInstances;
+		}
+
+		/// <summary>
+		/// Creates the movie unique key
+		/// </summary>
+		/// <param name="movieName"></param>
+		/// <returns></returns>
+		private static string GenerateMovieUniqueKey(string movieName)
+		{
+			var finalResult = movieName;
+			// replace fullstops with nothing
+			finalResult = finalResult.Replace(".", "");
+
+			// replace spaces with dashes
+			finalResult = finalResult.Replace(" ", "-");
+
+			// In the end all should be to lower
+			return finalResult.ToLowerInvariant();
+		}
+
+		public async Task<long> CreateNewMovie(MovieDTO newMovieDetails, CancellationToken cancellationToken)
+		{			
+			var foundGenreInstances = await ValidateDetails(newMovieDetails, cancellationToken);
 
 			// all checks have passed, let us now proceed to create the entity
 			var newMovieEntity = new Movie() { 
@@ -67,24 +92,6 @@ namespace TechDemo.MoviesDb.Movies.Managers
 			return newMovieEntity.Id;
 		}
 
-		/// <summary>
-		/// Creates the movie unique key
-		/// </summary>
-		/// <param name="movieName"></param>
-		/// <returns></returns>
-		private static string GenerateMovieUniqueKey(string movieName)
-		{
-			var finalResult = movieName;			
-			// replace fullstops with nothing
-			finalResult = finalResult.Replace(".", "");
-			
-			// replace spaces with dashes
-			finalResult = finalResult.Replace(" ", "-");
-			
-			// In the end all should be to lower
-			return finalResult.ToLowerInvariant() ;
-		}
-		
 
 		/// <summary>
 		/// Fetches a movie by id
@@ -158,6 +165,62 @@ namespace TechDemo.MoviesDb.Movies.Managers
 
 		}
 
-		public Task UpdateMovieById(long movieId, MovieDTO updatedMovieDetails, CancellationToken cancellationToken) => throw new NotImplementedException();
+		/// <summary>
+		/// Update the movie
+		/// </summary>
+		/// <param name="movieId"></param>
+		/// <param name="updatedMovieDetails"></param>
+		/// <param name="cancellationToken"></param>
+		/// <returns></returns>
+		/// <exception cref="MovieIdNotExistsException"></exception>
+		public async Task UpdateMovieById(long movieId, MovieDTO updatedMovieDetails, CancellationToken cancellationToken)
+		{
+			// first thing, see if the movie actually exists
+			var foundMovie = await _entityRepo.GetByKeyAsync(movieId, cancellationToken);
+			if (foundMovie == null)
+				throw new MovieIdNotExistsException(movieId, $"The movie with id {movieId} does not exist");
+
+			// Next validate the new details
+			var validGenres = await ValidateDetails(updatedMovieDetails, cancellationToken);
+
+			#region Manage Genres
+			List<string> nonMatchedCodes = new List<string>();
+
+			foreach (var item in foundMovie.Genres.Select(x => x.Code))
+			{
+				if (!updatedMovieDetails.GenreCodes.Contains(item))
+				{
+					// mark the ones we need to remove
+					nonMatchedCodes.Add(item);
+				}
+			}
+
+			// remove them from the collection
+			foreach (var item in nonMatchedCodes)
+			{
+				foundMovie.Genres.Remove(foundMovie.Genres.Single(x => x.Code == item));
+			}
+
+			var currentListContents = foundMovie.Genres.Select(x => x.Code).ToList();
+
+			// next we need to add the ones which we do not have
+			foreach (var item in validGenres)
+			{
+				if (!currentListContents.Contains(item.Code))
+				{
+					foundMovie.Genres.Add(item);
+				}
+			}
+
+			#endregion
+
+			foundMovie.Name = updatedMovieDetails.Name;
+			foundMovie.Length = (int)updatedMovieDetails.Length.TotalMinutes;
+			foundMovie.Description = updatedMovieDetails.Description;	
+			foundMovie.CriticRating = updatedMovieDetails.CriticRating;		
+
+			await _entityRepo.UpdateAsync(foundMovie, cancellationToken);			
+		}
+		
 	}
 }
