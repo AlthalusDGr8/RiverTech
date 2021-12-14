@@ -1,5 +1,6 @@
 using GraphQL.Server;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -9,10 +10,13 @@ using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using System;
 using System.IO;
+using System.Net;
 using System.Reflection;
+using TechDemo.MoviesDb.API.Models.Response;
 using TechDemo.MoviesDb.Caching.Memory;
 using TechDemo.MoviesDb.Core.Caching;
 using TechDemo.MoviesDb.Core.DbEntities;
+using TechDemo.MoviesDb.Core.Exceptions;
 using TechDemo.MoviesDb.EntityFrameworkCore.Context;
 using TechDemo.MoviesDb.EntityFrameworkCore.Repos;
 using TechDemo.MoviesDb.GraphQL.GraphSchema;
@@ -88,35 +92,35 @@ namespace TechDemo.MoviesDb.API
 			////I have built this custom error handler that will enable us to present outwards a standard format for error
 			//// It will also help return specifc error codes based on what we want to signal back
 			//// Here we would also use this to log any issues at this point
-			//app.UseExceptionHandler(errorHander =>
-			//{
-			//	errorHander.Run(
-			//		async context =>
-			//		{
-			//			var errorFeature = context.Features.Get<IExceptionHandlerFeature>();
-			//			var exception = errorFeature.Error;
+			app.UseExceptionHandler(errorHander =>
+			{
+				errorHander.Run(
+					async context =>
+					{
+						var errorFeature = context.Features.Get<IExceptionHandlerFeature>();
+						var exception = errorFeature.Error;
 
-			//				// ALl exceptions follow standard output
-			//				BaseErrorResponseModel errorModel = new BaseErrorResponseModel() { ErrorMessage = exception.Message, UniqueRequestId = context.TraceIdentifier };
+						// ALl exceptions follow standard output
+						BaseErrorResponseModel errorModel = new BaseErrorResponseModel() { ErrorMessage = exception.Message, UniqueRequestId = context.TraceIdentifier };
 
-			//				// If it is an exception that is ours, then handle one way and present our unqiue error code
-			//				if (exception is CentralCoreException coreException)
-			//			{
-			//				errorModel.UniqueErrorCode = coreException.UniqueErrorCode;
-			//				context.Response.StatusCode = (int)HttpStatusCode.Conflict;
-			//			}
-			//			else
-			//			{
-			//					// Otherwise its an unhandled system error 
-			//					errorModel.UniqueErrorCode = "INTERNAL_ERROR";
-			//				context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-			//			}
+						// If it is an exception that is ours, then handle one way and present our unqiue error code
+						if (exception is CentralCoreException coreException)
+						{
+							errorModel.UniqueErrorCode = coreException.UniqueErrorCode;
+							context.Response.StatusCode = (int)HttpStatusCode.Conflict;
+						}
+						else
+						{
+							// Otherwise its an unhandled system error 
+							errorModel.UniqueErrorCode = "INTERNAL_ERROR";
+							context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+						}
 
-			//			context.Response.ContentType = "application/json";
-			//			await context.Response.WriteAsync(JsonSerializer.Serialize(errorModel));
-			//		}
-			//		);
-			//});
+						context.Response.ContentType = "application/json";
+						await context.Response.WriteAsync(JsonSerializer.Serialize(errorModel));
+					}
+					);
+			});
 
 
 			// use HTTP middleware for ChatSchema at default path /graphql

@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace TechDemo.MoviesDb.Core.Extentions
 {
@@ -24,6 +25,17 @@ namespace TechDemo.MoviesDb.Core.Extentions
 		public static string SafeTrim(this string source)
 		{
 			return string.IsNullOrEmpty(source) ? source : source.Trim();
+		}
+
+		/// <summary>
+		/// Removes any special charatacters from a string
+		/// </summary>
+		/// <param name="source"></param>
+		/// <param name="replacementCharacter"></param>
+		/// <returns></returns>
+		public static string RemoveSpecialCharacters(this string source, string replacementCharacter)
+		{
+			return Regex.Replace(source, @"[^0-9a-zA-Z\._]", replacementCharacter);
 		}
 	}
 }

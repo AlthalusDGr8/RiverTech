@@ -1,4 +1,7 @@
-﻿CREATE TABLE OrleansStorage
+﻿IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[OrleansStorage]') AND type in (N'U'))
+
+BEGIN
+CREATE TABLE OrleansStorage
 (
     -- These are for the book keeping. Orleans calculates
     -- these hashes (see RelationalStorageProvide implementation),
@@ -212,3 +215,5 @@ VALUES
         AND ServiceId = @ServiceId AND @ServiceId IS NOT NULL
         OPTION(FAST 1, OPTIMIZE FOR(@GrainIdHash UNKNOWN, @GrainTypeHash UNKNOWN));'
 );
+
+END

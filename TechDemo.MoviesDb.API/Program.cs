@@ -26,8 +26,6 @@ namespace TechDemo.MoviesDb.API
 				NumberHandling = System.Text.Json.Serialization.JsonNumberHandling.AllowNamedFloatingPointLiterals
 			};
 
-
-
 			return Host.CreateDefaultBuilder(args)
 				
 				// Configuration

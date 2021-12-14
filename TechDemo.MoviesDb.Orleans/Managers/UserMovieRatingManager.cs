@@ -28,7 +28,7 @@ namespace TechDemo.MoviesDb.Orleans.Managers
 			var grain = _grainFactory.GetGrain<IUserMovieRatingsGrain>(movieId);
 			var currentRating = await grain.Get();
 
-			return currentRating.AverageUserRating;
+			return (float.IsNaN(currentRating.AverageUserRating) ? 0 : currentRating.AverageUserRating;
 		}
 
 

@@ -1,4 +1,5 @@
 ﻿using TechDemo.MoviesDb.Core.DbEntities;
+using TechDemo.MoviesDb.Core.Extentions;
 using TechDemo.MoviesDb.Movies.Definitions;
 using TechDemo.MoviesDb.Movies.Entities;
 using TechDemo.MoviesDb.Movies.Entities.DataTransferObjects;
@@ -63,8 +64,9 @@ namespace TechDemo.MoviesDb.Movies.Managers
 		private static string GenerateMovieUniqueKey(string movieName)
 		{
 			var finalResult = movieName;
-			// replace fullstops with nothing
-			finalResult = finalResult.Replace(".", "");
+			
+			// replace special characters
+			finalResult = finalResult.RemoveSpecialCharacters(" ");
 
 			// replace spaces with dashes
 			finalResult = finalResult.Replace(" ", "-");
