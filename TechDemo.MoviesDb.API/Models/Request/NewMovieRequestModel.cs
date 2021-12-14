@@ -25,11 +25,7 @@ namespace TechDemo.MoviesDb.API.Models.Request
 		/// Total Run Time
 		/// </summary>
 		public int RunTimeInMinutes { get; set; }
-		/// <summary>
-		/// Image URl
-		/// </summary>
-		public string ImgUrl { get; set; }
-
+		
 		/// <summary>
 		/// COnverts a request model into a DTO
 		/// </summary>
@@ -39,8 +35,7 @@ namespace TechDemo.MoviesDb.API.Models.Request
 		{
 			CriticRating = newMovieRequestModel.Rating,
 			Description = newMovieRequestModel.Description,
-			GenreCodes = newMovieRequestModel.Genres,
-			ImgUrl = newMovieRequestModel.ImgUrl,
+			GenreCodes = newMovieRequestModel.Genres,			
 			Length = TimeSpan.FromMinutes(newMovieRequestModel.RunTimeInMinutes),
 			Name = newMovieRequestModel.Name
 		};

@@ -26,7 +26,8 @@ namespace TechDemo.MoviesDb.API.Controllers
 			_movieManger = movieManger;
 		}
 
-
+		[Route("")]
+		[HttpPost]
 		public async Task<long> SubmitNewMovie([FromBody] NewMovieRequestModel newMovie, CancellationToken cancellationToken)
 		{
 			return await _movieManger.CreateNewMovie(NewMovieRequestModel.ConvertToMovieDTO(newMovie), cancellationToken);

@@ -6,18 +6,23 @@ using TechDemo.MoviesDb.Movies.Exceptions;
 
 namespace TechDemo.MoviesDb.Movies.Managers
 {
+	/// <summary>
+	/// Implementation of movie Manager
+	/// </summary>
 	public class MovieManager : IMovieManger
 	{
 		private readonly IEntityRepo<Movie> _entityRepo;
+		private readonly IEntityRepo<Genre> _genreEntityRepo;
 		private readonly IGenreManager _genreManager;
-		public MovieManager(IEntityRepo<Movie> entityRepo, IGenreManager genreManager)
+		public MovieManager(IEntityRepo<Movie> entityRepo, IGenreManager genreManager, IEntityRepo<Genre> genreEntityRepo)
 		{
 			_entityRepo = entityRepo;
 			_genreManager = genreManager;
+			_genreEntityRepo = genreEntityRepo;
 		}
 
-		public Task<long> CreateNewMovie(MovieDTO newMovieDetails, CancellationToken cancellationToken)
-		{
+		public async Task<long> CreateNewMovie(MovieDTO newMovieDetails, CancellationToken cancellationToken)
+		{			
 			// If movie run time is less then 1 minute then throw exception
 			if (newMovieDetails.Length.TotalMinutes < 1)
 				throw new InvalidFieldLengthException(nameof(newMovieDetails.Length.TotalMinutes), newMovieDetails.Length.TotalMinutes.ToString(), 1, 999, "Run time cannot be less then 1 minute");
@@ -32,11 +37,14 @@ namespace TechDemo.MoviesDb.Movies.Managers
 				throw new InvalidFieldValueException(nameof(newMovieDetails.Name), newMovieDetails.Name, "Name cannot be empty");
 
 			// need to verify if the genres provided are part of our lookups
+			var allGenres = await _genreEntityRepo.GetAllAsync();			
+			ICollection<Genre> foundGenreInstances = new List<Genre>(0);
 			foreach (var item in newMovieDetails.GenreCodes)
 			{
 				try
 				{
 					var checkGenreExists = _genreManager.GetByCode(item, cancellationToken);
+					foundGenreInstances.Add(allGenres.Single(x => x.Code.Equals(item, StringComparison.OrdinalIgnoreCase)));
 				}
 				catch (GenreNotExistsException exp)
 				{
@@ -48,18 +56,33 @@ namespace TechDemo.MoviesDb.Movies.Managers
 			var newMovieEntity = new Movie() { 
 				CriticRating = newMovieDetails.CriticRating, 
 				Description = newMovieDetails.Description, 
-				ImgUrl = newMovieDetails.ImgUrl, 
+				ImgUrl = GenerateMovieUniqueKey(newMovieDetails.Name) + ".jpg", 
 				Length = (int)newMovieDetails.Length.TotalMinutes,
-				Name = newMovieDetails.Name };
+				Name = newMovieDetails.Name,
+				UniqueKey = GenerateMovieUniqueKey(newMovieDetails.Name),				
+				Genres = foundGenreInstances
+			};
 
-			newMovieDetails.UniqueKey = GenerateMovieUniqueKey(newMovieDetails.Name);
+			newMovieEntity = await _entityRepo.CreateAsync(newMovieEntity, cancellationToken);
+			return newMovieEntity.Id;
 		}
 
-		private string GenerateMovieUniqueKey(string movieName)
+		/// <summary>
+		/// Creates the movie unique key
+		/// </summary>
+		/// <param name="movieName"></param>
+		/// <returns></returns>
+		private static string GenerateMovieUniqueKey(string movieName)
 		{
-			string finalResult = movieName;
-
-			return finalResult;
+			var finalResult = movieName;			
+			// replace fullstops with nothing
+			finalResult = finalResult.Replace(".", "");
+			
+			// replace spaces with dashes
+			finalResult = finalResult.Replace(" ", "-");
+			
+			// In the end all should be to lower
+			return finalResult.ToLowerInvariant() ;
 		}
 		
 
