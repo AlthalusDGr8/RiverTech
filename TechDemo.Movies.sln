@@ -6,7 +6,6 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tools", "tools", "{C5911799-6F6D-4CDA-B2AB-EEFD9D54A473}"
 	ProjectSection(SolutionItems) = preProject
 		app-info.json = app-info.json
-		Directory.Build.props = Directory.Build.props
 		NuGet.Config = NuGet.Config
 		readme.md = readme.md
 	EndProjectSection

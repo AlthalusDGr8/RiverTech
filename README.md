@@ -1,79 +1,52 @@
-# Movies Microservice
+# Movies Microservice Technical Demo
+
 **Version: 1.0**
-## Scenario
 
-You are tasked with creating an API for an application that the company is building for a client. The application is a movies indexing application that will have high volumes of traffic and thus it needs to be fast, efficient and robust while being secure at the same time.
+## Structure:
 
-The application has the following functionality:
+### TechDemo.MoviesDb.Core:
 
-## Features
+Contains all the basic methods and classes to be used across the application
 
-- **Home**
-  - List top 5 highest rated movies
-- **Movies List**
-  - List Movies
-  - Search
-  - Filter by Genre
-- **Movie detail**
-  - Display selected movie detail information
-- **Create Movie**
-  - Create a new movie that can be retrieved in the movies list
-- **Update Movie**
-  - Update movies data.  
+### TechDemo.MoviesDb.Caching.Memory
 
-### Technologies required
+Basic Memory Cache implementation
 
-- [ASP.NET (AspNetCore)](https://dotnet.microsoft.com/apps/aspnet) (3.1 or higher)
-- [Microsoft Orleans](https://dotnet.github.io/orleans/) (3 or higher)
-- [GraphQL](https://github.com/graphql-dotnet/graphql-dotnet) (3 or higher)
+### TechDemo.MoviesDb.Movies
 
-*You may use any 3rd party libraries which can facilitates your development.*
+Defines the application entities plus access layer called Managers
 
-### Content
+### TechDemo.MoviesDb.EntityFrameworkCore
 
-- A complete working solution with GraphQL and Orleans pre-configured. You do not need to create the boilerplate code yourself
-- A `movies.json` with some mock data that can be used as your database (Although you might opt to use some other datasource)
+Contains the elements that the system needs to use Entity Framework such as the DbContext plus Repoistory patter implementation
 
-### Running the sample application
+### TechDemo.MoviesDb.GraphQL
 
-- Make sure the startup project is set to `Movies.Server`
-- The project has one controller `SampleDataController` that has to requests:
-  - [GET] http://localhost:6600/api/sampledata/{id}
-  - [POST] http://localhost:6600/api/sampledata/{id}
-- There is also a Graph Query for the Application `AppGraphQuery` and one GraphType `SampleDataGraphType`
-  - Accessible through: `http://localhost:6600/api/graphql`
-  - Sample query:
-      ```
-      query sampleData($id: String!) {
-          sample(id: $id) {
-              id,
-              name
-          }
-      }
-      ```
-- All the endpoints call one simple Grain called `SampleGrain` that holds the data on the Orleans server
+Contains the elements to run GraphQL built on top of Entity Framework
 
-### Helpful links
-- [Orleans](https://dotnet.github.io/orleans/docs/grains/index.html)
-- [GraphQL](https://graphql.org/learn/)
-- [Docker](https://www.docker.com/)
+### TechDemo.MoviesDb.Orleans
 
-### Extra Credit
+Contains all that is needed to expose a specific Orleans grains
 
-- Pre-loading data in memory on App Start-up so it can be retrieved faster (using the required technologies)
-- Use of good design patterns that avoid bottle necks
-- Add Unit tests
-- Rudimentary UI
-- Dockerized application
+### TechDemo.MoviesDb.API
 
-If you get the demo in good shape and have extra time, add your own flair and features.
+API ingress application
 
-### Deliverable
+## Getting Started
 
-- Provide a working application
-- Provide source code in a public git such as github or Bitbucket repository
-- Provide markdown readme file
-  - General information about the app
-  - Provide steps how to build/launch your application
+1. Download the source code and open using Visual Studio
+2. Open SQL Management Studio and connect to database using connection string: (LocalDB)\MSSQLLocalDB. This will connect to a local instance of SQL server
+3. Under the API project you should find a folder called "Schema\_Setup". Open file "00 - Schema Setup.sql"
+4. Modify the paths found under "FILENAME" that make sense to your setup
+5. Execute the file. This should create the basic schema plus also insert the sample data
+6. If you plan to run Orleans with DB Storage, then execute also "01 - Orleans Query Creation.sql" and "02- Orleans Query Store Storage Creation.sql" (by default we are using Memory and not SQL Server)
+7. Set TechDemo.MoviesDb.API as startup project and launch
+8. The landing page should be a swagger interface allowing you to invoke the apis from it (swagger/index.html)
+9. To test out graphql, please navigate to "ui/playground"
 
-Good luck!
+## Things of Note:
+
+- All logs are being fed to console, including Entity Framework SQLs
+- All API error responses have been normalised into a uniform error handler for easier website error handling
+- All exceptions have a unique identifier to help troubleshoot issues further
+
